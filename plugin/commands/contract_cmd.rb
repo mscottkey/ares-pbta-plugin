@@ -41,7 +41,7 @@ module AresMUSH
         end
 
         message = "#{enactor.name} has accepted the contract.\n\nDescription: #{contract.description}\nModifier: #{contract.modifier}"
-        result = Jobs.create_job("HeroesGuild Contracts", "Contract: #{contract.title}", message, enactor)
+        result = Jobs.create_job(Jobs.request_category, "Contract: #{contract.title}", message, enactor)
         job = result[:job]
 
         contract.update(status: "active", character: enactor, job_id: job ? job.id.to_i : nil)
