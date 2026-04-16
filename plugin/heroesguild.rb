@@ -2,6 +2,10 @@ require_relative 'helpers'
 require_relative 'models/pbta_char_model'
 require_relative 'models/lead_model'
 require_relative 'models/dungeon_contract'
+require_relative 'models/tavern_night'
+require_relative 'models/tavern_participant'
+require_relative 'models/dungeon_run'
+require_relative 'models/run_participant'
 require_relative 'engine'
 require_relative 'commands/roll_cmd'
 require_relative 'commands/move_cmd'
@@ -14,6 +18,7 @@ require_relative 'commands/contract_cmd'
 require_relative 'web/char_profile_web'
 require_relative 'web/jobboard_web'
 require_relative 'web/chargen_web'
+require_relative 'web/container_web'
 
 module AresMUSH
   module HeroesGuild
@@ -49,6 +54,17 @@ module AresMUSH
       when "setHeroesGuildRole"      then return SetRoleRequestHandler
       when "setHeroesGuildGimmick"   then return SetGimmickRequestHandler
       when "heroesguildChargenData"  then return ChargenDataRequestHandler
+      when "hgStartTavernNight"      then return StartTavernNightRequestHandler
+      when "hgCloseTavernNight"      then return CloseTavernNightRequestHandler
+      when "hgTavernNight"           then return TavernNightRequestHandler
+      when "hgTavernAction"          then return TavernActionRequestHandler
+      when "hgAddClue"               then return AddClueRequestHandler
+      when "hgStartDungeonRun"       then return StartDungeonRunRequestHandler
+      when "hgDungeonRun"            then return DungeonRunRequestHandler
+      when "hgSelectContract"        then return SelectContractRequestHandler
+      when "hgEndDungeonRun"         then return EndDungeonRunRequestHandler
+      when "hgDungeonGmAction"       then return DungeonGmActionRequestHandler
+      when "hgHudRollMove"           then return HudRollMoveRequestHandler
       end
       nil
     end

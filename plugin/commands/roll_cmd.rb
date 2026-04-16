@@ -30,13 +30,13 @@ module AresMUSH
         enactor.room.emit Engine.format_roll(enactor.name, stat_name.capitalize,
                                               stat_name, result)
 
-        contract = AresMUSH::DungeonContract.find(status: "active").first
-        doom_level = contract ? contract.doom_level.to_i : 0
+        run = HeroesGuild.active_dungeon_run(enactor.room)
+        doom_level = run ? run.doom_level.to_i : 0
 
         emit_consequences(Engine.consequence_data(enactor, result, doom_level))
 
-        if result[:tier] == :miss && contract
-          emit_doom(Engine.advance_doom(contract), enactor.room.name)
+        if result[:tier] == :miss && run && run.status == "active"
+          emit_doom(Engine.advance_doom(run), enactor.room.name)
         end
       end
 

@@ -20,25 +20,24 @@ module AresMUSH
 
       def do_start
         id = cmd.args ? cmd.args.strip : nil
-        contract = AresMUSH::DungeonContract[id]
-        unless contract && contract.status == "posted"
-          client.emit_failure "Contract not found or not available to start."
+        run = AresMUSH::DungeonRun[id]
+        unless run && run.status == "pending"
+          client.emit_failure "No pending dungeon run found with that id."
           return
         end
 
-        contract.update(status: "active")
-        enactor.room.emit "%xcThe dungeon yawns open. What happens next is not going to be clean.%xn"
-        enactor.room.emit "Current Doom level is: #{contract.doom_level}"
+        run.update(status: "active")
+        enactor.room.emit "%xcThe dungeon run begins. Doom: #{run.doom_level}%xn"
       end
 
       def do_doom
-        contract = AresMUSH::DungeonContract.find(status: "active").first
-        unless contract
-          client.emit_failure "No active dungeon contract found."
+        run = HeroesGuild.active_dungeon_run(enactor.room)
+        unless run && run.status == "active"
+          client.emit_failure "No active dungeon run in this room."
           return
         end
 
-        doom_data = Engine.advance_doom(contract)
+        doom_data = Engine.advance_doom(run)
         room_name = enactor.room.name
         enactor.room.emit "%xr#{t('heroesguild.doom_increased', level: doom_data[:new_doom])}%xn"
         case doom_data[:threshold]
@@ -63,46 +62,39 @@ module AresMUSH
       end
 
       def do_progress
-        contract = AresMUSH::DungeonContract.find(status: "active").first
-        unless contract
-          client.emit_failure "No active dungeon contract found."
+        run = HeroesGuild.active_dungeon_run(enactor.room)
+        unless run && run.status == "active"
+          client.emit_failure "No active dungeon run in this room."
           return
         end
 
         boxes = cmd.args ? cmd.args.strip.to_i : 0
-        new_prog = contract.progress_boxes.to_i + boxes
-        contract.update(progress_boxes: new_prog)
+        new_prog = run.progress_boxes.to_i + boxes
+        run.update(progress_boxes: new_prog)
 
-        if new_prog >= contract.progress_max.to_i
-          contract.update(status: "complete")
-          enactor.room.emit "%xg[DUNGEON CLEARED] You survived. The contract is complete!%xn"
-          if contract.job_id
-            job = AresMUSH::Job[contract.job_id]
-            Jobs.comment(job, enactor, "Dungeon cleared! Doom reached: #{contract.doom_level}", false) if job
-          end
+        if new_prog >= run.progress_max.to_i
+          run.update(status: "complete")
+          enactor.room.emit "%xg[DUNGEON CLEARED] You survived. The run is complete!%xn"
         else
-          enactor.room.emit "%xy[PROGRESS] Marked #{boxes} boxes. Total: #{new_prog}/#{contract.progress_max}%xn"
+          enactor.room.emit "%xy[PROGRESS] Marked #{boxes} boxes. Total: #{new_prog}/#{run.progress_max}%xn"
         end
       end
 
       def do_end
-        contract = AresMUSH::DungeonContract.find(status: "active").first
-        unless contract
-          client.emit_failure "No active dungeon contract found."
+        run = HeroesGuild.active_dungeon_run(enactor.room)
+        unless run
+          client.emit_failure "No active dungeon run in this room."
           return
         end
 
-        if contract.status != "complete"
-          contract.update(status: "failed")
-          enactor.room.emit "%xr[DUNGEON ABANDONED] The party retreated. Contract failed.%xn"
-          if contract.job_id
-            job = AresMUSH::Job[contract.job_id]
-            Jobs.comment(job, enactor, "Dungeon abandoned / failed. Doom reached: #{contract.doom_level}", false) if job
-          end
+        if run.status != "complete"
+          run.update(status: "failed", ended_at: Time.now.to_s)
+          enactor.room.emit "%xr[DUNGEON ABANDONED] The party retreated. Run failed.%xn"
+          run.contract.update(status: "posted") if run.contract
         end
 
-        enactor.room.emit "%xhDungeon Summary:%xn Doom reached #{contract.doom_level}. " \
-                          "Progress: #{contract.progress_boxes}/#{contract.progress_max}."
+        enactor.room.emit "%xhDungeon Summary:%xn Doom reached #{run.doom_level}. " \
+                          "Progress: #{run.progress_boxes}/#{run.progress_max}."
       end
     end
   end

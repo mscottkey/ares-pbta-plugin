@@ -3,12 +3,21 @@ import { inject as service } from '@ember/service';
 
 export default Component.extend({
   gameApi: service(),
-  
+  chargenData: null,
+
+  init() {
+    this._super(...arguments);
+    this.gameApi.requestOne('heroesguildChargenData', {}, null)
+      .then((data) => {
+        this.set('chargenData', data);
+      });
+  },
+
   actions: {
     initStats() {
       this.gameApi.requestOne('initHeroesGuildStats', {}, null)
         .then(() => {
-          this.get('flashMessages').success('Playbook stats initialized from your Group setting!');
+          this.get('flashMessages').success('Playbook stats initialized!');
         });
     },
     selectGimmick(gimmickName) {

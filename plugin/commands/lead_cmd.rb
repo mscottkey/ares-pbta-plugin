@@ -40,16 +40,16 @@ module AresMUSH
         enactor.room.emit Engine.format_roll(enactor.name, "Investigate", "cunning", result)
 
         if result[:tier] == :miss
-          contract = AresMUSH::DungeonContract.find(status: "active").first
-          doom_level = contract ? contract.doom_level.to_i : 0
+          run = HeroesGuild.active_dungeon_run(enactor.room)
+          doom_level = run ? run.doom_level.to_i : 0
           data = Engine.consequence_data(enactor, result, doom_level)
           if data[:xp_bump]
             xp_msg = t('heroesguild.xp_gained', total: data[:new_xp])
             enactor.room.emit t('heroesguild.miss', xp_msg: xp_msg)
             client.emit t('heroesguild.advance_ready', name: enactor.name) if data[:advance_ready]
           end
-          if contract
-            doom_data = Engine.advance_doom(contract)
+          if run && run.status == "active"
+            doom_data = Engine.advance_doom(run)
             enactor.room.emit "%xr#{t('heroesguild.doom_increased', level: doom_data[:new_doom])}%xn"
             case doom_data[:threshold]
             when :alert   then enactor.room.emit "%xr#{t('heroesguild.doom_alert',   room: room_name)}%xn"
@@ -95,9 +95,7 @@ module AresMUSH
 
         lead.update(clues_gathered: lead.clues_gathered.to_i + 1)
         client.emit "Marked a clue on lead #{lead.id}. (#{lead.clues_gathered}/#{lead.clues_needed})"
-        if lead.clues_gathered.to_i >= lead.clues_needed.to_i
-          convert_lead(lead)
-        end
+        convert_lead(lead) if lead.clues_gathered.to_i >= lead.clues_needed.to_i
       end
 
       def do_convert
@@ -120,7 +118,8 @@ module AresMUSH
         lead.update(status: "converted")
         mod = MODIFIERS.sample
         contract = AresMUSH::DungeonContract.create(title: lead.title, description: lead.description,
-                                                     modifier: mod, character: lead.character)
+                                                     modifier: mod, character: lead.character,
+                                                     status: "posted")
         enactor.room.emit t('heroesguild.lead_converted', title: contract.title)
         enactor.room.emit "%xcThe dungeon has a modifier: #{mod}%xn"
       end

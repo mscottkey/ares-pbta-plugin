@@ -1,0 +1,23 @@
+{{#if this.custom.heroesguild.dungeon_run_id}}
+  <li>
+    <a href="/heroesguild/dungeon/{{this.custom.heroesguild.dungeon_run_id}}"
+       target="_blank">
+      Dungeon HUD ↗
+    </a>
+  </li>
+  <li><a href="#" {{action 'hgEndDungeonRun'}}>End Dungeon Run</a></li>
+{{else}}
+  <li><a href="#" {{action 'hgStartDungeonRun'}}>Start Dungeon Run</a></li>
+{{/if}}
+
+{{#if this.custom.heroesguild.tavern_night_id}}
+  <li>
+    <a href="/heroesguild/tavern/{{this.custom.heroesguild.tavern_night_id}}"
+       target="_blank">
+      Tavern HUD ↗
+    </a>
+  </li>
+  <li><a href="#" {{action 'hgCloseTavernNight'}}>Close Tavern Night</a></li>
+{{else}}
+  <li><a href="#" {{action 'hgStartTavernNight'}}>Open Tavern Night</a></li>
+{{/if}}

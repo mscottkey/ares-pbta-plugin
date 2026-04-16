@@ -35,8 +35,8 @@ module AresMUSH
         enactor.room.emit Engine.format_roll(enactor.name, move_name, stat_name, result)
         enactor.room.emit "%xc#{move_config['desc']}%xn"
 
-        contract = AresMUSH::DungeonContract.find(status: "active").first
-        doom_level = contract ? contract.doom_level.to_i : 0
+        run = HeroesGuild.active_dungeon_run(enactor.room)
+        doom_level = run ? run.doom_level.to_i : 0
         data = Engine.consequence_data(enactor, result, doom_level)
 
         if data[:xp_bump]
@@ -50,8 +50,8 @@ module AresMUSH
                                total: data[:new_stress], max: data[:stress_max])
         end
 
-        if result[:tier] == :miss && contract
-          doom_data = Engine.advance_doom(contract)
+        if result[:tier] == :miss && run && run.status == "active"
+          doom_data = Engine.advance_doom(run)
           enactor.room.emit "%xr#{t('heroesguild.doom_increased', level: doom_data[:new_doom])}%xn"
           case doom_data[:threshold]
           when :alert   then enactor.room.emit "%xr#{t('heroesguild.doom_alert',   room: room_name)}%xn"
