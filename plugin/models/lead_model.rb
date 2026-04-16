@@ -4,9 +4,9 @@ module AresMUSH
 
     attribute :title
     attribute :description
-    attribute :status, default: "open"
-    attribute :clues_needed, Typecast::Integer, default: 3
-    attribute :clues_gathered, Typecast::Integer, default: 0
+    attribute :status,         :default => "open"
+    attribute :clues_needed,   :type => DataType::Integer, :default => 3
+    attribute :clues_gathered, :type => DataType::Integer, :default => 0
 
     reference :character, "AresMUSH::Character"
 

@@ -3,6 +3,9 @@ module AresMUSH
     class ContractCmd
       include CommandHandler
 
+      MODIFIERS = ["Cursed Gold", "Anti-Magic Field", "Haunted",
+                   "Flooded Lower Levels", "Boss Guarded", "Trapped Entrance"].freeze
+
       def handle
         case cmd.switch
         when "list" then do_list
@@ -16,7 +19,7 @@ module AresMUSH
       private
 
       def do_list
-        contracts = DungeonContract.find(status: "posted")
+        contracts = AresMUSH::DungeonContract.find(status: "posted")
         if contracts.empty?
           client.emit "No contracts posted on the board."
           return
@@ -31,17 +34,18 @@ module AresMUSH
 
       def do_take
         id = cmd.args ? cmd.args.strip : nil
-        contract = DungeonContract[id]
+        contract = AresMUSH::DungeonContract[id]
         unless contract && contract.status == "posted"
           client.emit_failure "Contract not found or unavailable."
           return
         end
 
-        message = "#{enactor.name} has accepted the contract.\\n\\nDescription: #{contract.description}\\nModifier: #{contract.modifier}"
+        message = "#{enactor.name} has accepted the contract.\n\nDescription: #{contract.description}\nModifier: #{contract.modifier}"
         job = Jobs.create_job("HeroesGuild Contracts", "Contract: #{contract.title}", message, enactor)
 
-        contract.update(status: "active", character_id: enactor.id, job_id: job ? job.id : nil)
-        enactor.room.emit "%xgContract accepted. The dungeon is waiting. (Ticket opened: #{job ? job.id : 'N/A'})%xn"
+        contract.update(status: "active", character: enactor, job_id: job ? job.id : nil)
+        enactor.room.emit "%xgContract accepted. The dungeon is waiting. " \
+                          "(Ticket opened: #{job ? job.id : 'N/A'})%xn"
       end
 
       def do_post
@@ -55,14 +59,11 @@ module AresMUSH
           return
         end
 
-        parts = cmd.args.split("=")
-        title = parts[0].strip
-        desc = parts[1].strip
+        title, desc = cmd.args.split("=", 2).map(&:strip)
+        mod = MODIFIERS.sample
 
-        modifiers = ["Cursed Gold", "Anti-Magic Field", "Haunted", "Flooded Lower Levels", "Boss Guarded", "Trapped Entrance"]
-        mod = modifiers.sample
-
-        DungeonContract.create(title: title, description: desc, modifier: mod, status: "posted")
+        AresMUSH::DungeonContract.create(title: title, description: desc,
+                                          modifier: mod, status: "posted")
         enactor.room.emit "Posted new contract: #{title}"
       end
     end

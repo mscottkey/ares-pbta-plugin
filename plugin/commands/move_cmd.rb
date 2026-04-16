@@ -6,7 +6,7 @@ module AresMUSH
       attr_accessor :move_name
 
       def parse_args
-        self.move_name = cmd.args ? cmd.args.strip.titlecase : nil
+        self.move_name = cmd.args ? cmd.args.strip.split.map(&:capitalize).join(' ') : nil
       end
 
       def required_args
@@ -27,23 +27,37 @@ module AresMUSH
 
         stat_name = move_config["stat"]
         room_name = enactor.room ? enactor.room.name : ""
-        stat_val = HeroesGuild.stat_value(enactor, stat_name, 
-                                           move_name: move_name, 
-                                           room_name: room_name)
+        stat_val = HeroesGuild.stat_value(enactor, stat_name,
+                                          move_name: move_name,
+                                          room_name: room_name)
 
         result = Engine.roll(stat_val)
-        output = Engine.format_roll(enactor.name, move_name, stat_name, result)
-        enactor.room.emit output
+        enactor.room.emit Engine.format_roll(enactor.name, move_name, stat_name, result)
         enactor.room.emit "%xc#{move_config['desc']}%xn"
 
-        contract = DungeonContract.find(status: "active").first
+        contract = AresMUSH::DungeonContract.find(status: "active").first
         doom_level = contract ? contract.doom_level.to_i : 0
-        consequences = Engine.apply_consequences(enactor, result, doom_level)
-        consequences.each { |msg| enactor.room.emit msg }
+        data = Engine.consequence_data(enactor, result, doom_level)
+
+        if data[:xp_bump]
+          xp_msg = t('heroesguild.xp_gained', total: data[:new_xp])
+          enactor.room.emit t('heroesguild.miss', xp_msg: xp_msg)
+          client.emit t('heroesguild.advance_ready', name: enactor.name) if data[:advance_ready]
+        end
+        if data[:stress_bump]
+          enactor.room.emit t('heroesguild.stress_taken',
+                               name: enactor.name, amount: 1,
+                               total: data[:new_stress], max: data[:stress_max])
+        end
 
         if result[:tier] == :miss && contract
-          doom_msgs = Engine.advance_doom(contract, enactor.room.name)
-          doom_msgs.each { |msg| enactor.room.emit "%xr#{msg}%xn" }
+          doom_data = Engine.advance_doom(contract)
+          enactor.room.emit "%xr#{t('heroesguild.doom_increased', level: doom_data[:new_doom])}%xn"
+          case doom_data[:threshold]
+          when :alert   then enactor.room.emit "%xr#{t('heroesguild.doom_alert',   room: room_name)}%xn"
+          when :hostile then enactor.room.emit "%xr#{t('heroesguild.doom_hostile', room: room_name)}%xn"
+          when :lethal  then enactor.room.emit "%xr#{t('heroesguild.doom_lethal',  room: room_name)}%xn"
+          end
         end
       end
     end

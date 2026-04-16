@@ -5,11 +5,11 @@ module AresMUSH
     attribute :title
     attribute :description
     attribute :modifier
-    attribute :status, default: "posted"
-    attribute :doom_level, Typecast::Integer, default: 0
-    attribute :progress_boxes, Typecast::Integer, default: 0
-    attribute :progress_max, Typecast::Integer, default: 2
-    attribute :job_id, Typecast::Integer
+    attribute :status,         :default => "posted"
+    attribute :doom_level,     :type => DataType::Integer, :default => 0
+    attribute :progress_boxes, :type => DataType::Integer, :default => 0
+    attribute :progress_max,   :type => DataType::Integer, :default => 2
+    attribute :job_id,         :type => DataType::Integer
 
     reference :character, "AresMUSH::Character"
 

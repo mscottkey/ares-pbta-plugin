@@ -6,7 +6,6 @@ module AresMUSH
       attr_accessor :stat_name, :modifier
 
       def parse_args
-        # Accept: +roll brawn  OR  +roll flow+1  OR  +roll heart-2
         args = cmd.args ? cmd.args.strip : ""
         if args =~ /^(\w+)\s*([+-]\d+)?$/
           self.stat_name = $1.downcase
@@ -28,20 +27,40 @@ module AresMUSH
         stat_val = HeroesGuild.stat_value(enactor, stat_name)
         result = Engine.roll(stat_val, modifier)
 
-        room = enactor.room
-        output = Engine.format_roll(enactor.name, stat_name.capitalize, stat_name, result)
-        room.emit output
+        enactor.room.emit Engine.format_roll(enactor.name, stat_name.capitalize,
+                                              stat_name, result)
 
-        # Find active contract for doom tracking
-        contract = DungeonContract.find(status: "active").first
+        contract = AresMUSH::DungeonContract.find(status: "active").first
         doom_level = contract ? contract.doom_level.to_i : 0
 
-        consequences = Engine.apply_consequences(enactor, result, doom_level)
-        consequences.each { |msg| room.emit msg }
+        emit_consequences(Engine.consequence_data(enactor, result, doom_level))
 
         if result[:tier] == :miss && contract
-          doom_msgs = Engine.advance_doom(contract, room.name)
-          doom_msgs.each { |msg| room.emit "%xr#{msg}%xn" }
+          emit_doom(Engine.advance_doom(contract), enactor.room.name)
+        end
+      end
+
+      private
+
+      def emit_consequences(data)
+        if data[:xp_bump]
+          xp_msg = t('heroesguild.xp_gained', total: data[:new_xp])
+          enactor.room.emit t('heroesguild.miss', xp_msg: xp_msg)
+          client.emit t('heroesguild.advance_ready', name: enactor.name) if data[:advance_ready]
+        end
+        if data[:stress_bump]
+          enactor.room.emit t('heroesguild.stress_taken',
+                               name: enactor.name, amount: 1,
+                               total: data[:new_stress], max: data[:stress_max])
+        end
+      end
+
+      def emit_doom(doom_data, room_name)
+        enactor.room.emit "%xr#{t('heroesguild.doom_increased', level: doom_data[:new_doom])}%xn"
+        case doom_data[:threshold]
+        when :alert   then enactor.room.emit "%xr#{t('heroesguild.doom_alert',   room: room_name)}%xn"
+        when :hostile then enactor.room.emit "%xr#{t('heroesguild.doom_hostile', room: room_name)}%xn"
+        when :lethal  then enactor.room.emit "%xr#{t('heroesguild.doom_lethal',  room: room_name)}%xn"
         end
       end
     end

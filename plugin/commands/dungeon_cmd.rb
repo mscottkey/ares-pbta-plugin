@@ -5,13 +5,14 @@ module AresMUSH
 
       def handle
         case cmd.switch
-        when "start" then do_start
-        when "doom" then do_doom
-        when "threat" then do_threat
+        when "start"    then do_start
+        when "doom"     then do_doom
+        when "threat"   then do_threat
         when "progress" then do_progress
-        when "end" then do_end
+        when "end"      then do_end
         else
-          client.emit_failure "Use +dungeon/start <id>, +dungeon/doom, +dungeon/threat, +dungeon/progress <boxes>, or +dungeon/end"
+          client.emit_failure "Use +dungeon/start <id>, +dungeon/doom, +dungeon/threat, " \
+                              "+dungeon/progress <boxes>, or +dungeon/end"
         end
       end
 
@@ -19,7 +20,7 @@ module AresMUSH
 
       def do_start
         id = cmd.args ? cmd.args.strip : nil
-        contract = DungeonContract[id]
+        contract = AresMUSH::DungeonContract[id]
         unless contract
           client.emit_failure "No contract found with id '#{id}'."
           return
@@ -31,14 +32,20 @@ module AresMUSH
       end
 
       def do_doom
-        contract = DungeonContract.find(status: "active").first
+        contract = AresMUSH::DungeonContract.find(status: "active").first
         unless contract
           client.emit_failure "No active dungeon contract found."
           return
         end
 
-        msgs = Engine.advance_doom(contract, enactor.room.name)
-        msgs.each { |msg| enactor.room.emit "%xr#{msg}%xn" }
+        doom_data = Engine.advance_doom(contract)
+        room_name = enactor.room.name
+        enactor.room.emit "%xr#{t('heroesguild.doom_increased', level: doom_data[:new_doom])}%xn"
+        case doom_data[:threshold]
+        when :alert   then enactor.room.emit "%xr#{t('heroesguild.doom_alert',   room: room_name)}%xn"
+        when :hostile then enactor.room.emit "%xr#{t('heroesguild.doom_hostile', room: room_name)}%xn"
+        when :lethal  then enactor.room.emit "%xr#{t('heroesguild.doom_lethal',  room: room_name)}%xn"
+        end
       end
 
       def do_threat
@@ -52,12 +59,11 @@ module AresMUSH
           "An alarm — magical, shrill, definitely heard.",
           "The smell of smoke."
         ]
-        threat = threats.sample
-        enactor.room.emit "%xr[ENVIRONMENTAL THREAT] #{threat}%xn"
+        enactor.room.emit "%xr[ENVIRONMENTAL THREAT] #{threats.sample}%xn"
       end
 
       def do_progress
-        contract = DungeonContract.find(status: "active").first
+        contract = AresMUSH::DungeonContract.find(status: "active").first
         unless contract
           client.emit_failure "No active dungeon contract found."
           return
@@ -80,7 +86,7 @@ module AresMUSH
       end
 
       def do_end
-        contract = DungeonContract.find(status: "active").first
+        contract = AresMUSH::DungeonContract.find(status: "active").first
         unless contract
           client.emit_failure "No active dungeon contract found."
           return
@@ -95,7 +101,8 @@ module AresMUSH
           end
         end
 
-        enactor.room.emit "%xhDungeon Summary:%xn Doom reached #{contract.doom_level}. Progress: #{contract.progress_boxes}/#{contract.progress_max}."
+        enactor.room.emit "%xhDungeon Summary:%xn Doom reached #{contract.doom_level}. " \
+                          "Progress: #{contract.progress_boxes}/#{contract.progress_max}."
       end
     end
   end

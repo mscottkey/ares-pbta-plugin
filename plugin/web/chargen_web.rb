@@ -1,38 +1,58 @@
 module AresMUSH
   module HeroesGuild
+    # Initializes pbta_stats and pbta_role from the character's Groups Playbook setting.
     class InitStatsRequestHandler
-      include WebRequestHandler
       def handle(request)
-        char = get_character(request)
-        return error_response("Not found") unless char
-        
+        error = WebHelpers.check_login(request)
+        return error if error
+
+        char = request.enactor
         role_name = Groups.group_value(char, "Playbook")
-        return error_response("You must select a Playbook group first on the Groups tab.") if role_name.nil? || role_name.empty?
+        return { error: "You must select a Playbook group first on the Groups tab." } if role_name.nil? || role_name.empty?
 
         roles = Global.read_config("heroesguild", "roles")
-        return error_response("Invalid playbook in group settings.") unless roles[role_name]
-        
+        return { error: "Invalid playbook in group settings." } unless roles[role_name]
+
         stats = roles[role_name]["stats"].stringify_keys
-        char.update(pbta_stats: stats)
+        char.update(pbta_stats: stats, pbta_role: role_name)
+        { success: true }
+      end
+    end
+
+    # Sets pbta_role directly (web chargen role picker, if used instead of Groups).
+    class SetRoleRequestHandler
+      def handle(request)
+        error = WebHelpers.check_login(request)
+        return error if error
+
+        char = request.enactor
+        role_name = request.args[:role]
+        roles = Global.read_config("heroesguild", "roles")
+        return { error: "Invalid role." } unless roles[role_name]
+
+        stats = roles[role_name]["stats"].stringify_keys
+        char.update(pbta_role: role_name, pbta_stats: stats)
         { success: true }
       end
     end
 
     class SetGimmickRequestHandler
-      include WebRequestHandler
       def handle(request)
-        char = get_character(request)
-        return error_response("Not found") unless char
+        error = WebHelpers.check_login(request)
+        return error if error
+
+        char = request.enactor
         gimmick_name = request.args[:gimmick]
         gimmicks = Global.read_config("heroesguild", "gimmicks")
-        return error_response("Invalid gimmick") unless gimmicks[gimmick_name]
+        return { error: "Invalid gimmick." } unless gimmicks[gimmick_name]
+
         char.update(pbta_gimmick: gimmick_name)
         { success: true }
       end
     end
 
+    # Returns roles and gimmicks list for the chargen UI (no login required — read-only).
     class ChargenDataRequestHandler
-      include WebRequestHandler
       def handle(request)
         roles = Global.read_config("heroesguild", "roles").map do |name, cfg|
           { name: name, desc: cfg["desc"], stats: cfg["stats"] }

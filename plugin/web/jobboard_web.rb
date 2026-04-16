@@ -1,10 +1,8 @@
 module AresMUSH
   module HeroesGuild
     class JobBoardRequestHandler
-      include WebRequestHandler
-
       def handle(request)
-        contracts = DungeonContract.find(status: "posted").map do |c|
+        contracts = AresMUSH::DungeonContract.find(status: "posted").map do |c|
           {
             id: c.id,
             title: c.title,

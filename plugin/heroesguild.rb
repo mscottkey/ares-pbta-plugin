@@ -4,7 +4,7 @@ require_relative 'models/lead_model'
 require_relative 'models/dungeon_contract'
 require_relative 'engine'
 require_relative 'commands/roll_cmd'
-require_relative 'commands/move_cmd'  
+require_relative 'commands/move_cmd'
 require_relative 'commands/sheet_cmd'
 require_relative 'commands/advance_cmd'
 require_relative 'commands/tavern_cmd'
@@ -25,26 +25,32 @@ module AresMUSH
       Global.read_config("heroesguild", "shortcuts")
     end
 
-    def self.dispatch(client, cmd, enactor)
+    # Returns the handler CLASS for a given command root. Ares instantiates it.
+    def self.get_cmd_handler(client, cmd, enactor)
       case cmd.root
-      when "roll" then RollCmd.new(client, cmd, enactor).run
-      when "move" then MoveCmd.new(client, cmd, enactor).run
-      when "sheet" then SheetCmd.new(client, cmd, enactor).run
-      when "advance" then AdvanceCmd.new(client, cmd, enactor).run
-      when "carouse", "imbibe", "sober" then TavernCmd.new(client, cmd, enactor).run
-      when "dungeon" then DungeonCmd.new(client, cmd, enactor).run
-      when "investigate", "lead" then LeadCmd.new(client, cmd, enactor).run
-      when "contract" then ContractCmd.new(client, cmd, enactor).run
+      when "roll"       then return RollCmd
+      when "move"       then return MoveCmd
+      when "sheet"      then return SheetCmd
+      when "advance"    then return AdvanceCmd
+      when "carouse"    then return CarouseCmd
+      when "imbibe"     then return ImbibeCmd
+      when "sober"      then return SoberCmd
+      when "dungeon"    then return DungeonCmd
+      when "investigate", "lead" then return LeadCmd
+      when "contract"   then return ContractCmd
       end
+      nil
     end
 
     def self.get_web_request_handler(request)
       case request.cmd
-      when "heroesguildJobBoard" then JobBoardRequestHandler.new
-      when "initHeroesGuildStats" then InitStatsRequestHandler.new
-      when "setHeroesGuildGimmick" then SetGimmickRequestHandler.new
-      when "heroesguildChargenData" then ChargenDataRequestHandler.new
+      when "heroesguildJobBoard"     then return JobBoardRequestHandler
+      when "initHeroesGuildStats"    then return InitStatsRequestHandler
+      when "setHeroesGuildRole"      then return SetRoleRequestHandler
+      when "setHeroesGuildGimmick"   then return SetGimmickRequestHandler
+      when "heroesguildChargenData"  then return ChargenDataRequestHandler
       end
+      nil
     end
   end
 end
