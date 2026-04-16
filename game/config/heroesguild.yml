@@ -1,0 +1,97 @@
+shortcuts:
+  roll: roll
+  move: move
+  sheet: sheet
+  advance: advance
+  carouse: carouse
+  dungeon: dungeon
+  investigate: investigate
+  contract: contract
+
+roles:
+  Meatshield:
+    desc: "Big, hit things, take hits."
+    stats: { brawn: 2, heart: 1, flow: 0, cunning: -1, luck: 0 }
+    core_moves: ["Hack and Slash", "Defy Danger", "Stand Firm"]
+  Shadowfoot:
+    desc: "Sneak, steal, survive."
+    stats: { brawn: -1, heart: 0, flow: 1, cunning: 2, luck: 0 }
+    core_moves: ["Pick Pockets", "Vanish", "Defy Danger"]
+  Arcanist:
+    desc: "Magic is just physics you haven't broken yet."
+    stats: { brawn: -1, heart: 0, flow: 2, cunning: 1, luck: 0 }
+    core_moves: ["Unleash", "Attune", "Defy Danger"]
+  Heartspeaker:
+    desc: "Words are weapons. Relationships are armor."
+    stats: { brawn: -1, heart: 2, flow: 0, cunning: 1, luck: 0 }
+    core_moves: ["Parley", "Inspire", "Defy Danger"]
+  Wildcardigan:
+    desc: "No plan. No fear. Impressive survival rate, somehow."
+    stats: { brawn: 0, heart: 0, flow: 0, cunning: 0, luck: 3 }
+    core_moves: ["Hail Mary", "Lucky Break", "Defy Danger"]
+
+gimmicks:
+  The Drunk:
+    desc: "+1 Luck when in the Tavern."
+    bonus_stat: luck
+    bonus_value: 1
+    location_required: Tavern
+  Dungeon Veteran:
+    desc: "+1 to Defy Danger when Doom >= 7."
+    move_bonus: "Defy Danger"
+    doom_threshold: 7
+  Guild Rat:
+    desc: "+1 Heart for Investigate moves."
+    move_bonus: Investigate
+    stat_override: heart
+
+moves:
+  universal:
+    Defy Danger:
+      stat: flow
+      desc: "When you act despite imminent threat, roll +Flow. On 10+, you do it. On 7-9, you do it but the GM picks a cost."
+    Hack and Slash:
+      stat: brawn
+      desc: "When you engage an enemy in melee, roll +Brawn."
+    Parley:
+      stat: heart
+      desc: "When you use leverage to bend someone to your will, roll +Heart."
+    Investigate:
+      stat: cunning
+      desc: "When you dig for information, roll +Cunning. Generates a Lead on 7+."
+    Hail Mary:
+      stat: luck
+      desc: "When all else fails, roll +Luck. On 10+, something improbable saves you."
+    Carouse:
+      stat: heart
+      desc: "When you drink and revel in the Tavern, roll +Heart."
+  role_specific:
+    Stand Firm:
+      stat: brawn
+      desc: "When you hold your ground against overwhelming force, roll +Brawn. On 10+, clear 1 Stress."
+    Vanish:
+      stat: flow
+      desc: "When you need to disappear, roll +Flow."
+    Unleash:
+      stat: flow
+      desc: "When you channel raw magic, roll +Flow. Name your effect; GM names a cost on 7-9."
+    Inspire:
+      stat: heart
+      desc: "When you rally your allies, roll +Heart. On 10+, give the party +1 forward."
+    Lucky Break:
+      stat: luck
+      desc: "Once per scene, roll +Luck to retroactively make something convenient be true."
+
+doom_thresholds:
+  4:
+    label: Alert
+    effect: "7-9 results also deal 1 Stress."
+  7:
+    label: Hostile
+    effect: "GM introduces an Environmental Threat (traps, collapses, etc.)"
+  10:
+    label: Lethal
+    effect: "All characters must Defy Danger just to remain in the room."
+
+stress_max: 5
+xp_to_advance: 10

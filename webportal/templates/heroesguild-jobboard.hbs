@@ -1,0 +1,32 @@
+<div class="container heroesguild-jobboard">
+  <h1>Heroes Guild — Job Board</h1>
+  
+  <div class="contracts-section">
+    <h2>Available Contracts</h2>
+    {{#if model.contracts.length}}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Contract</th>
+            <th>Modifier</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each model.contracts as |contract|}}
+            <tr>
+              <td>
+                <strong>{{contract.title}}</strong>
+                <p class="small">{{contract.description}}</p>
+              </td>
+              <td><span class="modifier-tag">{{contract.modifier}}</span></td>
+              <td>{{contract.status}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <p class="no-contracts">The board is empty. Go make some trouble and find some Leads.</p>
+    {{/if}}
+  </div>
+</div>
