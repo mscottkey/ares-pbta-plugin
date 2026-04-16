@@ -21,8 +21,8 @@ module AresMUSH
       def do_start
         id = cmd.args ? cmd.args.strip : nil
         contract = AresMUSH::DungeonContract[id]
-        unless contract
-          client.emit_failure "No contract found with id '#{id}'."
+        unless contract && contract.status == "posted"
+          client.emit_failure "Contract not found or not available to start."
           return
         end
 

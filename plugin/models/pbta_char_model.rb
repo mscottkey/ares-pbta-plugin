@@ -1,5 +1,5 @@
 module AresMUSH
-  class Character < Ohm::Model
+  class Character
     attribute :pbta_role
     attribute :pbta_gimmick
     attribute :pbta_stats,        :type => DataType::Hash,    :default => {}

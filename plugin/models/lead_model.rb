@@ -11,5 +11,6 @@ module AresMUSH
     reference :character, "AresMUSH::Character"
 
     index :status
+    index :character_id
   end
 end

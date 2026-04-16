@@ -2,7 +2,7 @@ module AresMUSH
   module HeroesGuild
     class CharProfileWeb
       def self.get_fields(char, viewer)
-        role = Groups.group_value(char, "Playbook")
+        role = char.pbta_role
         return {} if role.nil? || role.empty?
 
         stats = char.pbta_stats || {}
