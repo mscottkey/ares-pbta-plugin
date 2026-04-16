@@ -275,7 +275,10 @@ module AresMUSH
 
         final_status = run.status == "complete" ? "complete" : "failed"
         run.update(status: final_status, ended_at: Time.now.to_s)
-        run.contract.update(status: "posted") if run.contract && final_status == "failed"
+        if run.contract
+          new_contract_status = final_status == "complete" ? "complete" : "posted"
+          run.contract.update(status: new_contract_status)
+        end
 
         run.room.emit "%xr[DUNGEON RUN] #{char.name} ends the run. " \
                       "Status: #{final_status.upcase}. " \

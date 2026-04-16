@@ -7,9 +7,9 @@ module AresMUSH
         "woke_in_debt" => "%{name} apparently made some promises last night. The kind with interest."
       }.freeze
 
-      def tavern_fallout(char)
+      def tavern_fallout(char, room = enactor.room)
         msg = FALLOUT_OUTCOMES.values.sample % { name: char.name }
-        enactor.room.emit "%xr[TAVERN FALLOUT] #{msg}%xn"
+        room.emit "%xr[TAVERN FALLOUT] #{msg}%xn"
       end
     end
 
@@ -48,6 +48,13 @@ module AresMUSH
         when :miss
           enactor.room.emit t('heroesguild.carouse_miss', name: enactor.name)
           tavern_fallout(enactor)
+          run = HeroesGuild.active_dungeon_run(enactor.room)
+          doom_level = run ? run.doom_level.to_i : 0
+          data = Engine.consequence_data(enactor, result, doom_level)
+          if data[:xp_bump]
+            xp_msg = t('heroesguild.xp_gained', total: data[:new_xp])
+            enactor.room.emit t('heroesguild.miss', xp_msg: xp_msg)
+          end
         end
       end
     end
