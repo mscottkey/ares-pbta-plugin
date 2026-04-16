@@ -77,8 +77,8 @@ module AresMUSH
           contract.update(status: "complete")
           enactor.room.emit "%xg[DUNGEON CLEARED] You survived. The contract is complete!%xn"
           if contract.job_id
-            job = Job[contract.job_id]
-            Jobs.add_comment(job, enactor, "Dungeon cleared successfully! Doom Reached: #{contract.doom_level}", true) if job
+            job = AresMUSH::Job[contract.job_id]
+            Jobs.comment(job, enactor, "Dungeon cleared! Doom reached: #{contract.doom_level}", false) if job
           end
         else
           enactor.room.emit "%xy[PROGRESS] Marked #{boxes} boxes. Total: #{new_prog}/#{contract.progress_max}%xn"
@@ -96,8 +96,8 @@ module AresMUSH
           contract.update(status: "failed")
           enactor.room.emit "%xr[DUNGEON ABANDONED] The party retreated. Contract failed.%xn"
           if contract.job_id
-            job = Job[contract.job_id]
-            Jobs.add_comment(job, enactor, "Dungeon abandoned / failed. Doom Reached: #{contract.doom_level}", true) if job
+            job = AresMUSH::Job[contract.job_id]
+            Jobs.comment(job, enactor, "Dungeon abandoned / failed. Doom reached: #{contract.doom_level}", false) if job
           end
         end
 

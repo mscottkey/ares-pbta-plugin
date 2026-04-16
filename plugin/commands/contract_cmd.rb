@@ -41,9 +41,10 @@ module AresMUSH
         end
 
         message = "#{enactor.name} has accepted the contract.\n\nDescription: #{contract.description}\nModifier: #{contract.modifier}"
-        job = Jobs.create_job("HeroesGuild Contracts", "Contract: #{contract.title}", message, enactor)
+        result = Jobs.create_job("HeroesGuild Contracts", "Contract: #{contract.title}", message, enactor)
+        job = result[:job]
 
-        contract.update(status: "active", character: enactor, job_id: job ? job.id : nil)
+        contract.update(status: "active", character: enactor, job_id: job ? job.id.to_i : nil)
         enactor.room.emit "%xgContract accepted. The dungeon is waiting. " \
                           "(Ticket opened: #{job ? job.id : 'N/A'})%xn"
       end
