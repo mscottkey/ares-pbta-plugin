@@ -1,21 +1,14 @@
-{{#if (eq chargenTab 'hg-gimmick')}}
-  <div class="hg-chargen-gimmick">
-    <h3>Apply Playbook Templates</h3>
-    <p>Once you have selected your Playbook in the standard Groups tab, click below to lock in your starting stats.</p>
-    <button class="btn btn-primary" {{action "initStats"}}>Auto-Populate Playbook Stats</button>
-    
-    <hr />
-    
-    <h3>Choose Your Gimmick</h3>
-    <p>Your Gimmick is your signature quirk. One mechanical bonus. Lean into it.</p>
-    <div class="gimmick-list">
-      {{#each chargenData.gimmicks as |gimmick|}}
-        <div class="gimmick-card {{if (eq char.heroesguild_gimmick gimmick.name) 'selected'}}"
-             {{action "selectGimmick" gimmick.name}}>
-          <h4>{{gimmick.name}}</h4>
-          <p>{{gimmick.desc}}</p>
-        </div>
-      {{/each}}
-    </div>
-  </div>
-{{/if}}
+<div role="tabpanel" class="tab-pane" id="pbta">
+  <p>Select your Playbook in the Groups tab first, then click below to initialize your stats.</p>
+  <button class="btn btn-primary" {{action "initStats"}}>Initialize Playbook Stats</button>
+
+  <hr/>
+
+  <p>Choose your Gimmick:</p>
+  <select onchange={{action "selectGimmick" value="target.value"}}>
+    <option value="">-- Pick a Gimmick --</option>
+    {{#each chargenData.gimmicks as |gimmick|}}
+      <option value={{gimmick.name}}>{{gimmick.name}} — {{gimmick.desc}}</option>
+    {{/each}}
+  </select>
+</div>

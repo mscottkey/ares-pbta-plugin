@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default Component.extend({
   gameApi: service(),
+  flashMessages: service(),
   chargenData: null,
 
   init() {
@@ -16,14 +17,23 @@ export default Component.extend({
   actions: {
     initStats() {
       this.gameApi.requestOne('initHeroesGuildStats', {}, null)
-        .then(() => {
-          this.get('flashMessages').success('Playbook stats initialized!');
+        .then((response) => {
+          if (response.error) {
+            this.get('flashMessages').danger(response.error);
+          } else {
+            this.get('flashMessages').success('Playbook stats initialized!');
+          }
         });
     },
     selectGimmick(gimmickName) {
+      if (!gimmickName) { return; }
       this.gameApi.requestOne('setHeroesGuildGimmick', { gimmick: gimmickName }, null)
-        .then(() => {
-          this.set('char.heroesguild_gimmick', gimmickName);
+        .then((response) => {
+          if (response.error) {
+            this.get('flashMessages').danger(response.error);
+          } else {
+            this.get('flashMessages').success('Gimmick selected!');
+          }
         });
     }
   }
