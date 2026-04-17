@@ -73,16 +73,16 @@ module AresMUSH
 
     # Lists all available playbooks for display.
     def self.playbook_list
-      Global.read_config("pbta", "roles").map do |name, cfg|
-        stats = cfg["stats"].map { |s, v| "#{s}: #{v >= 0 ? '+' : ''}#{v}" }.join(", ")
+      (Global.read_config("pbta", "roles") || {}).map do |name, cfg|
+        stats = (cfg["stats"] || {}).map { |s, v| "#{s}: #{v.to_i >= 0 ? '+' : ''}#{v}" }.join(", ")
         { name: name, desc: cfg["desc"], stats: stats,
-          core_moves: cfg["core_moves"] }
+          core_moves: cfg["core_moves"] || [] }
       end
     end
 
     # Lists all available gimmicks for display.
     def self.gimmick_list
-      Global.read_config("pbta", "gimmicks").map do |name, cfg|
+      (Global.read_config("pbta", "gimmicks") || {}).map do |name, cfg|
         { name: name, desc: cfg["desc"] }
       end
     end

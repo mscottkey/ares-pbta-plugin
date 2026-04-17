@@ -1,13 +1,13 @@
 <div role="tabpanel" class="tab-pane" id="pbta">
   <p>Select your Playbook in the Groups tab first, then click below to initialize your stats.</p>
-  <button class="btn btn-primary" {{action "initStats"}}>Initialize Playbook Stats</button>
+  <button class="btn btn-primary" {{on "click" this.initStats}}>Initialize Playbook Stats</button>
 
-  <hr/>
+  <hr />
 
   <p>Choose your Gimmick:</p>
-  <select onchange={{action "selectGimmick" value="target.value"}}>
+  <select onchange={{this.selectGimmickFromEvent}}>
     <option value="">-- Pick a Gimmick --</option>
-    {{#each chargenData.gimmicks as |gimmick|}}
+    {{#each this.chargenData.gimmicks as |gimmick|}}
       <option value={{gimmick.name}}>{{gimmick.name}} — {{gimmick.desc}}</option>
     {{/each}}
   </select>

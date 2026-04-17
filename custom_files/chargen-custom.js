@@ -1,7 +1,9 @@
 import Component from '@ember/component';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
+  tagName: '',
   gameApi: service(),
   flashMessages: service(),
   chargenData: null,
@@ -14,27 +16,29 @@ export default Component.extend({
       });
   },
 
-  actions: {
-    initStats() {
-      this.gameApi.requestOne('initHeroesGuildStats', {}, null)
-        .then((response) => {
-          if (response.error) {
-            this.get('flashMessages').danger(response.error);
-          } else {
-            this.get('flashMessages').success('Playbook stats initialized!');
-          }
-        });
-    },
-    selectGimmick(gimmickName) {
-      if (!gimmickName) { return; }
-      this.gameApi.requestOne('setHeroesGuildGimmick', { gimmick: gimmickName }, null)
-        .then((response) => {
-          if (response.error) {
-            this.get('flashMessages').danger(response.error);
-          } else {
-            this.get('flashMessages').success('Gimmick selected!');
-          }
-        });
-    }
+  @action
+  initStats() {
+    this.gameApi.requestOne('initHeroesGuildStats', {}, null)
+      .then((response) => {
+        if (response.error) {
+          this.flashMessages.danger(response.error);
+        } else {
+          this.flashMessages.success('Playbook stats initialized!');
+        }
+      });
+  },
+
+  @action
+  selectGimmickFromEvent(event) {
+    const gimmickName = event.target.value;
+    if (!gimmickName) { return; }
+    this.gameApi.requestOne('setHeroesGuildGimmick', { gimmick: gimmickName }, null)
+      .then((response) => {
+        if (response.error) {
+          this.flashMessages.danger(response.error);
+        } else {
+          this.flashMessages.success('Gimmick selected!');
+        }
+      });
   }
 });

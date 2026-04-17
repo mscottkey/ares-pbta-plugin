@@ -3,8 +3,7 @@ module AresMUSH
     # Initializes pbta_stats and pbta_role from the character's Groups Playbook setting.
     class InitStatsRequestHandler
       def handle(request)
-        error = WebHelpers.check_login(request)
-        return error if error
+        return { error: t('webportal.not_logged_in') } unless request.enactor
         char = request.enactor
         role_name = char.group("Playbook")
         return { error: "Select a Playbook group first." } if role_name.nil? || role_name.empty?
@@ -15,16 +14,14 @@ module AresMUSH
     # Sets pbta_role directly (web chargen role picker).
     class SetRoleRequestHandler
       def handle(request)
-        error = WebHelpers.check_login(request)
-        return error if error
+        return { error: t('webportal.not_logged_in') } unless request.enactor
         PbtA.set_playbook(request.enactor, request.args[:role])
       end
     end
 
     class SetGimmickRequestHandler
       def handle(request)
-        error = WebHelpers.check_login(request)
-        return error if error
+        return { error: t('webportal.not_logged_in') } unless request.enactor
         PbtA.set_gimmick(request.enactor, request.args[:gimmick])
       end
     end
