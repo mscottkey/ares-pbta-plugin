@@ -1,8 +1,0 @@
-# Heroes Guild — BBS config note
-#
-# Phase 3 originally planned to use a BBS board for investigation threads.
-# Phase 3b replaced this with Jobs integration — each lead gets a Jobs ticket
-# rather than a forum post. No BBS board is required.
-#
-# This file is retained as a placeholder. It does not need to be merged into
-# aresmush/game/config/bbs.yml.
