@@ -3,6 +3,8 @@ shortcuts:
   move: move
   sheet: sheet
   advance: advance
+  playbook: playbook
+  gimmick: gimmick
 
 roles:
   Meatshield:

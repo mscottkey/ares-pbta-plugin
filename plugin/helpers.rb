@@ -47,6 +47,46 @@ module AresMUSH
       role_config ? role_config["stats"] : {}
     end
 
+    # ── Chargen Actions ──────────────────────────────────────────────────────
+
+    # Sets the character's playbook and initializes stats from the role config.
+    # Called by both client commands and web handlers.
+    # Returns { success: true } or { error: "message" }
+    def self.set_playbook(char, role_name)
+      return { error: "No role specified." } if role_name.nil? || role_name.empty?
+      roles = Global.read_config("pbta", "roles")
+      return { error: "Invalid playbook '#{role_name}'." } unless roles[role_name]
+      stats = roles[role_name]["stats"].stringify_keys
+      char.update(pbta_role: role_name, pbta_stats: stats)
+      { success: true }
+    end
+
+    # Sets the character's gimmick.
+    # Returns { success: true } or { error: "message" }
+    def self.set_gimmick(char, gimmick_name)
+      return { error: "No gimmick specified." } if gimmick_name.nil? || gimmick_name.empty?
+      gimmicks = Global.read_config("pbta", "gimmicks")
+      return { error: "Invalid gimmick '#{gimmick_name}'." } unless gimmicks[gimmick_name]
+      char.update(pbta_gimmick: gimmick_name)
+      { success: true }
+    end
+
+    # Lists all available playbooks for display.
+    def self.playbook_list
+      Global.read_config("pbta", "roles").map do |name, cfg|
+        stats = cfg["stats"].map { |s, v| "#{s}: #{v >= 0 ? '+' : ''}#{v}" }.join(", ")
+        { name: name, desc: cfg["desc"], stats: stats,
+          core_moves: cfg["core_moves"] }
+      end
+    end
+
+    # Lists all available gimmicks for display.
+    def self.gimmick_list
+      Global.read_config("pbta", "gimmicks").map do |name, cfg|
+        { name: name, desc: cfg["desc"] }
+      end
+    end
+
     # Returns the character's moves as an array of hashes for web display.
     def self.char_moves_for_web(char)
       role_moves = []

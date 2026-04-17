@@ -1,12 +1,12 @@
 {{#if (eq activeTab 'heroesguild')}}
   <div class="heroesguild-sheet">
-    {{#if char.heroesguild}}
+    {{#if char.pbta}}
       <div class="hg-header">
-        <span class="hg-role">{{char.heroesguild.role}}</span>
-        <span class="hg-gimmick">{{char.heroesguild.gimmick}}</span>
+        <span class="hg-role">{{char.pbta.role}}</span>
+        <span class="hg-gimmick">{{char.pbta.gimmick}}</span>
       </div>
       <div class="hg-stats">
-        {{#each-in char.heroesguild.stats as |stat value|}}
+        {{#each-in char.pbta.stats as |stat value|}}
           <div class="hg-stat">
             <div class="hg-stat-name">{{stat}}</div>
             <div class="hg-stat-value {{if (gte value 0) 'positive' 'negative'}}">
@@ -19,7 +19,7 @@
         <div class="hg-track">
           <span class="label">Stress</span>
           <div class="track-bar">
-            {{#each char.heroesguild.stress_pips as |pip|}}
+            {{#each char.pbta.stress_pips as |pip|}}
               <div class="pip {{if pip.filled 'filled'}}"></div>
             {{/each}}
           </div>
@@ -27,7 +27,7 @@
         <div class="hg-track">
           <span class="label">XP</span>
           <div class="track-bar">
-            {{#each char.heroesguild.xp_pips as |pip|}}
+            {{#each char.pbta.xp_pips as |pip|}}
               <div class="pip {{if pip.filled 'filled'}}"></div>
             {{/each}}
           </div>
@@ -35,7 +35,7 @@
       </div>
       <div class="hg-moves">
         <h4>Moves</h4>
-        {{#each char.heroesguild.all_moves as |move|}}
+        {{#each char.pbta.all_moves as |move|}}
           <div class="hg-move">
             <strong>{{move.name}}</strong>
             <p>{{move.desc}}</p>

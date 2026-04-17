@@ -11,7 +11,7 @@ module AresMUSH
 
       def handle
         unless ["stat", "move"].include?(cmd.switch)
-          client.emit_failure "Use +advance/stat <stat> or +advance/move <move_name>"
+          client.emit_failure "Use advance/stat <stat> or advance/move <move_name>"
           return
         end
 

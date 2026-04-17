@@ -9,10 +9,12 @@ This plugin provides the core PbtA loop — stats, rolls, moves, XP, stress, adv
 ## What's Included
 
 **Engine**
-- `+roll <stat> [+/-N]` — 2d6 + stat + modifier, emits result with tier (10+/7-9/6-)
-- `+move <name>` — named move roll; validates access, looks up stat and description
-- `+sheet [name]` — character sheet with stats, stress/XP tracks, and move list
-- `+advance/stat <stat>` or `+advance/move <name>` — spends 10 XP to raise a stat (+1, max +3) or learn a move
+- `roll <stat> [+/-N]` — 2d6 + stat + modifier, emits result with tier (10+/7-9/6-)
+- `move <name>` — named move roll; validates access, looks up stat and description
+- `sheet [name]` — character sheet with stats, stress/XP tracks, and move list
+- `advance/stat <stat>` or `advance/move <name>` — spends 10 XP to raise a stat (+1, max +3) or learn a move
+- `playbook [name]` — list available playbooks, or set yours and initialize stats
+- `gimmick [name]` — list available gimmicks, or set yours
 
 **Character Model** (extensions to the Ares `Character` class)
 - `pbta_role` — Playbook name (set during chargen)
@@ -45,7 +47,7 @@ This plugin provides the core PbtA loop — stats, rolls, moves, XP, stress, adv
 
 **Doom** escalates at thresholds 4 (Alert), 7 (Hostile), and 10 (Lethal). At Alert and above, weak hits also deal 1 Stress.
 
-**Advancement** requires 10 XP. Use `+advance/stat` or `+advance/move`. Stats cap at +3. XP resets to 0 on advance.
+**Advancement** requires 10 XP. Use `advance/stat` or `advance/move`. Stats cap at +3. XP resets to 0 on advance.
 
 **Gimmicks** grant passive bonuses — to a specific stat, to a specific move, or only when in a particular location (by room name substring).
 
@@ -92,15 +94,23 @@ plugins:
 
 ### 4. Add the chargen stage
 
-Open `aresmush/game/config/chargen.yml` and add the `hg-gimmick` stage after the Groups stage:
+Open `aresmush/game/config/chargen.yml` and add the `hg-gimmick` stage after `groups` and before `background`:
 
 ```yaml
 stages:
-  # ... existing stages ...
-  hg-gimmick:
+  start:
+    help: chargen
+  groups:
+    help: groups
+  hg-gimmick:           # ← add this
     help: heroesguild-gimmick
-  # ... remaining stages ...
+  background:
+    help: background
+  desc:
+    help: desc
 ```
+
+The exact surrounding stages depend on your game's chargen flow. The requirement is that `hg-gimmick` comes after `groups` (because stat init reads the Playbook group) and before app review.
 
 ### 5. Add the Playbook group
 
@@ -143,7 +153,23 @@ Merge notes:
 - `custom-routes.js` — this plugin adds no routes; leave your existing array unchanged
 - `custom.scss` — append PbtA style blocks to the bottom
 
-### 7. Reload
+### 7. Add web portal navigation (overlay plugins only)
+
+The base PbtA plugin adds no top-level nav links — the Playbook tab appears on the existing character profile page automatically.
+
+If you are also installing an overlay plugin that adds its own pages (such as the HeroesGuild plugin, which adds a Guild Board and session HUD pages), add those routes to `aresmush/game/config/website.yml` under `top_navbar`:
+
+```yaml
+top_navbar:
+  - title: Guild
+    menu:
+      - title: Guild Board
+        route: heroesguild-board
+```
+
+Replace the title and route with whatever your overlay plugin defines. Route names must match the `name` property in the overlay's `custom-routes.js`.
+
+### 8. Reload
 
 From in-game as an admin:
 
@@ -153,10 +179,12 @@ load pbta
 
 Or do a full restart on first install.
 
-### 8. Verify
+### 9. Verify
 
 ```
-+sheet             → empty PbtA sheet for your character
+sheet              → empty PbtA sheet for your character
+playbook           → list of available playbooks
+gimmick            → list of available gimmicks
 help roll          → roll help file
 help move          → move help file
 ```
