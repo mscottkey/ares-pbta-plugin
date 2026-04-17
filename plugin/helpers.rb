@@ -55,6 +55,7 @@ module AresMUSH
     def self.set_playbook(char, role_name)
       return { error: "No role specified." } if role_name.nil? || role_name.empty?
       roles = Global.read_config("pbta", "roles")
+      return { error: "Config error: pbta.yml missing or has no 'roles' key. Check game/config/pbta.yml is deployed." } if roles.nil?
       return { error: "Invalid playbook '#{role_name}'." } unless roles[role_name]
       stats = roles[role_name]["stats"].stringify_keys
       char.update(pbta_role: role_name, pbta_stats: stats)
