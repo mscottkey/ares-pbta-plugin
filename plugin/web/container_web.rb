@@ -151,6 +151,8 @@ module AresMUSH
             clues = result[:tier] == :strong ? 2 : 4
             lead  = AresMUSH::PbtaLead.create(title: seed[0], description: seed[1],
                                                status: "open", clues_needed: clues, character: char)
+            job_id = HeroesGuild.create_lead_job(lead, char)
+            lead.update(job_id: job_id) if job_id
             room.emit "#{char.name} picks up a lead: #{lead.title}" if room
             room.emit "%xy(Lead requires #{clues} clue(s))%xn" if room
             room.emit "%xr[COMPLICATION] You drew unwanted attention.%xn" if room && result[:tier] == :weak
@@ -174,17 +176,31 @@ module AresMUSH
         return { error: "Lead already converted." } unless lead.status == "open"
 
         lead.update(clues_gathered: lead.clues_gathered.to_i + 1)
+
+        HeroesGuild.post_lead_job_comment(
+          lead,
+          char,
+          "#{char.name} has added a clue. (#{lead.clues_gathered}/#{lead.clues_needed})"
+        )
+
         converted = false
 
         if lead.clues_gathered.to_i >= lead.clues_needed.to_i
           lead.update(status: "converted")
           modifiers = ["Cursed Gold", "Anti-Magic Field", "Haunted",
                        "Flooded Lower Levels", "Boss Guarded", "Trapped Entrance"]
-          AresMUSH::DungeonContract.create(
+          contract = AresMUSH::DungeonContract.create(
             title: lead.title, description: lead.description,
             modifier: modifiers.sample, character: char, status: "posted"
           )
           converted = true
+
+          HeroesGuild.post_lead_job_comment(
+            lead,
+            Game.master.system_character,
+            "This lead has been converted to a contract: #{contract.title}\n" \
+            "Modifier: #{contract.modifier}"
+          )
         end
 
         night = char.tavern_participants.map(&:tavern_night).compact

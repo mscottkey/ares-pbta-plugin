@@ -95,3 +95,8 @@ doom_thresholds:
 
 stress_max: 5
 xp_to_advance: 10
+
+# Investigation caps
+lead_player_cap: 1      # Max open leads per player at one time
+lead_global_cap: 10     # Max open leads across all players
+lead_inactive_days: 14  # Default suggestion only — flush uses a command arg

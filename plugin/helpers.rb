@@ -114,6 +114,111 @@ module AresMUSH
       end
     end
 
+    # ── Jobs Integration ─────────────────────────────────────────────────────
+
+    # Opens a Jobs ticket for a new Lead. Returns the job id (integer), or nil.
+    def self.create_lead_job(lead, char)
+      message = "#{lead.description}\n\n" \
+                "Investigator: #{char.name}\n" \
+                "Clues needed: #{lead.clues_needed}\n\n" \
+                "Use +lead/clue #{lead.id} in-game to mark a clue when ready."
+
+      result = Jobs.create_job(Jobs.request_category,
+                               "Investigation: #{lead.title}",
+                               message, char)
+      job = result[:job]
+      job ? job.id.to_i : nil
+    end
+
+    # Posts a comment to the lead's linked job ticket.
+    # Safe to call even if no job_id is set — silently skips.
+    def self.post_lead_job_comment(lead, author, message)
+      return unless lead.job_id
+      job = AresMUSH::Job[lead.job_id]
+      return unless job
+      Jobs.comment(job, author, message, false)
+    end
+
+    # Returns the number of days since the lead's job had any activity.
+    # Returns nil if no job linked, job not found, or created_at unparseable.
+    def self.lead_inactive_days(lead)
+      return nil unless lead.job_id
+      job = AresMUSH::Job[lead.job_id]
+      return nil unless job
+
+      last_activity = job.replies.map(&:created_at).compact.max
+      last_activity ||= job.created_at
+      return nil unless last_activity
+
+      begin
+        ((Time.now - Time.parse(last_activity)) / 86400).to_i
+      rescue
+        nil
+      end
+    end
+
+    # Closes a lead with IC job comment, optional conversion to contract,
+    # and player notification. Returns { outcome: :converted/:archived/:removed,
+    # contract: contract_or_nil }.
+    # reason: :staff or :idle — selects the job comment flavor.
+    def self.close_lead(lead, closed_by, reason: :staff)
+      outcome  = nil
+      contract = nil
+
+      if lead.clues_gathered.to_i >= lead.clues_needed.to_i
+        outcome = :converted
+        modifiers = ["Cursed Gold", "Anti-Magic Field", "Haunted",
+                     "Flooded Lower Levels", "Boss Guarded", "Trapped Entrance"]
+        contract = AresMUSH::DungeonContract.create(
+          title: lead.title, description: lead.description,
+          modifier: modifiers.sample, character: lead.character, status: "posted"
+        )
+        job_message = "The Guild has reviewed the evidence gathered on this investigation " \
+                      "and determined it sufficient. A contract has been posted. Good hunting."
+
+      elsif lead.clues_gathered.to_i > 0
+        outcome = :archived
+        job_message = reason == :staff ?
+          "The Guild has closed this investigation. If you have questions, speak with a Guildmaster." :
+          "The Guild has pulled this investigation from active status. The trail has gone cold — " \
+          "the notes have been filed, but without sufficient evidence to act on, no contract will " \
+          "be issued. Should new information come to light, bring it to a Guildmaster."
+
+      else
+        outcome = :removed
+        job_message = reason == :staff ?
+          "The Guild has closed this investigation. If you have questions, speak with a Guildmaster." :
+          "The Guild has pulled this investigation from the board. No evidence was gathered " \
+          "and the lead has been closed."
+      end
+
+      # Post IC comment and close the job
+      if lead.job_id
+        job = AresMUSH::Job[lead.job_id]
+        if job
+          Jobs.comment(job, Game.master.system_character, job_message, false)
+          Jobs.close_job(Game.master.system_character, job)
+        end
+      end
+
+      # Update lead status
+      if outcome == :converted
+        lead.update(status: "converted")
+      else
+        lead.update(status: "closed")
+      end
+
+      # Notify the player if they aren't the one closing it
+      char = lead.character
+      if char && char != closed_by
+        notify_msg = "Your investigation into \"#{lead.title}\" has been closed by the Guild. " \
+                     "Check the job for details."
+        Login.notify(char, :jobs, notify_msg, lead.id)
+      end
+
+      { outcome: outcome, contract: contract }
+    end
+
     # ── Web Data Builders ────────────────────────────────────────────────────
 
     # Full state hash for a DungeonRun — used by the Dungeon HUD web handler.

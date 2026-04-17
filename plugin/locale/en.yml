@@ -18,3 +18,21 @@ en:
     carouse_partial: "%{name} has a decent night. Clear %{stress} Stress, but make a choice."
     carouse_miss: "%{name} had TOO good a night. Tavern Fallout incoming."
     inebriation_limit: "%{name} has hit their limit. The night ends badly. Roll Tavern Fallout."
+
+    # Investigation cap messages
+    investigate_player_cap: "You already have an active investigation. Resolve it before opening a new one. Use +lead/list to check your leads."
+    investigate_global_cap: "The board is full — ten investigations are already active. Check +leads to see what needs attention before the Guild can take on more."
+
+    # Player notification when lead is closed
+    lead_notify_closed: "Your investigation into \"%{title}\" has been closed by the Guild. Check the job for details."
+
+    # Staff command feedback
+    leads_flush_header: "Flushing leads with no job activity in %{days}+ days..."
+    leads_flush_converted: "  Converted: \"%{title}\" (%{clues}/%{needed} clues) → Contract posted"
+    leads_flush_archived: "  Archived:  \"%{title}\" (%{clues}/%{needed} clues) → Insufficient clues"
+    leads_flush_removed: "  Removed:   \"%{title}\" (0/%{needed} clues) → No progress"
+    leads_flush_summary: "%{count} lead(s) flushed. Board has %{active}/%{cap} active leads."
+    leads_flush_none: "No idle leads found with %{days}+ days of inactivity."
+    lead_close_success: "Lead \"%{title}\" closed. %{outcome}"
+    lead_close_not_found: "No lead found with id '%{id}'."
+    lead_close_already_closed: "Lead '%{id}' is already closed."

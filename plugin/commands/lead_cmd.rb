@@ -13,8 +13,9 @@ module AresMUSH
         when "list"    then do_list
         when "clue"    then do_clue
         when "convert" then do_convert
+        when "close"   then do_close
         else
-          client.emit_failure "Use +investigate, +lead/list, +lead/clue <id>, or +lead/convert <id>"
+          client.emit_failure "Use +investigate, +lead/list, +lead/clue <id>, +lead/convert <id>, or +lead/close <id>"
         end
       end
 
@@ -32,6 +33,22 @@ module AresMUSH
                    "Flooded Lower Levels", "Boss Guarded", "Trapped Entrance"].freeze
 
       def do_investigate
+        # Check player cap
+        player_cap  = Global.read_config("heroesguild", "lead_player_cap").to_i
+        player_open = AresMUSH::PbtaLead.find(character_id: enactor.id, status: "open").count
+        if player_open >= player_cap
+          client.emit_failure t('heroesguild.investigate_player_cap')
+          return
+        end
+
+        # Check global cap
+        global_cap  = Global.read_config("heroesguild", "lead_global_cap").to_i
+        global_open = AresMUSH::PbtaLead.find(status: "open").count
+        if global_open >= global_cap
+          client.emit_failure t('heroesguild.investigate_global_cap')
+          return
+        end
+
         room_name = enactor.room ? enactor.room.name : ""
         stat_val = HeroesGuild.stat_value(enactor, "cunning",
                                           move_name: "Investigate",
@@ -63,6 +80,8 @@ module AresMUSH
           lead = AresMUSH::PbtaLead.create(title: lead_info[0], description: lead_info[1],
                                             status: "open", clues_needed: clues,
                                             character: enactor)
+          job_id = HeroesGuild.create_lead_job(lead, enactor)
+          lead.update(job_id: job_id) if job_id
           enactor.room.emit t('heroesguild.lead_generated', name: enactor.name, desc: lead.title)
           enactor.room.emit "%xy(Lead requires #{clues} clue(s) to convert)%xn"
           if result[:tier] == :weak
@@ -114,6 +133,41 @@ module AresMUSH
         convert_lead(lead)
       end
 
+      def do_close
+        unless enactor.is_admin?
+          client.emit_failure "Only staff can close leads directly."
+          return
+        end
+
+        id = cmd.args ? cmd.args.strip : nil
+        unless id
+          client.emit_failure "Usage: +lead/close <id>"
+          return
+        end
+
+        lead = AresMUSH::PbtaLead[id]
+        unless lead
+          client.emit_failure t('heroesguild.lead_close_not_found', id: id)
+          return
+        end
+
+        unless lead.status == "open"
+          client.emit_failure t('heroesguild.lead_close_already_closed', id: id)
+          return
+        end
+
+        result = HeroesGuild.close_lead(lead, enactor, reason: :staff)
+
+        outcome_text = case result[:outcome]
+        when :converted then "Converted to contract: #{result[:contract].title}"
+        when :archived  then "Archived — insufficient clues (#{lead.clues_gathered}/#{lead.clues_needed})"
+        when :removed   then "Removed — no progress made"
+        end
+
+        client.emit_success t('heroesguild.lead_close_success',
+                               title: lead.title, outcome: outcome_text)
+      end
+
       def convert_lead(lead)
         lead.update(status: "converted")
         mod = MODIFIERS.sample
@@ -122,6 +176,14 @@ module AresMUSH
                                                      status: "posted")
         enactor.room.emit t('heroesguild.lead_converted', title: contract.title)
         enactor.room.emit "%xcThe dungeon has a modifier: #{mod}%xn"
+
+        HeroesGuild.post_lead_job_comment(
+          lead,
+          Game.master.system_character,
+          "This lead has been converted to a contract: #{contract.title}\n" \
+          "Modifier: #{contract.modifier}\n" \
+          "The contract is now posted on the Guild Board."
+        )
       end
     end
   end

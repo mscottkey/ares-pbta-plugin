@@ -1,0 +1,288 @@
+// Heroes Guild — custom styles
+// Destination: aresmush/webportal/app/styles/custom.scss
+// If the file already has content, append the sections below rather than replacing.
+
+// ── Guild Board ──────────────────────────────────────────────────────
+
+.heroesguild-board h2 {
+  border-bottom: 2px solid #C9813A;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.hg-board-section {
+  margin-bottom: 2.5rem;
+}
+
+.hg-modifier-badge {
+  background-color: #1a0a05;
+  border: 1px solid #C9813A;
+  color: #C9813A;
+  padding: 2px 8px;
+  font-size: 0.85em;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.03em;
+}
+
+.hg-doom-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9em;
+  letter-spacing: 0.04em;
+}
+
+.hg-doom-Safe    { color: #7fc47f; }
+.hg-doom-Alert   { color: #C9813A; }
+.hg-doom-Hostile { color: #cc4444; }
+.hg-doom-Lethal  { color: #ff2222; font-weight: bold; }
+
+.hg-result-complete { color: #7fc47f; }
+.hg-result-failed   { color: #cc4444; }
+
+.hg-clue-track {
+  font-family: 'Cinzel', serif;
+  color: #C9813A;
+}
+
+// ── HUD pages ────────────────────────────────────────────────────────
+
+.heroesguild-dungeon-hud h1,
+.heroesguild-tavern-hud h1 {
+  color: #F5D7A0;
+  border-bottom: 2px solid #C9813A;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.hg-hud-header {
+  margin-bottom: 1.5rem;
+}
+
+.hg-status-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-left: 10px;
+}
+
+.hg-status-pending  { background-color: #4a2c0a; color: #F5D7A0; }
+.hg-status-active   { background-color: #6b1515; color: #F5D7A0; }
+.hg-status-complete { background-color: #2d6b2d; color: #F5D7A0; }
+.hg-status-failed   { background-color: #2c2c2a; color: #888780; }
+.hg-status-closed   { background-color: #2c2c2a; color: #888780; }
+
+.hg-doom-section,
+.hg-progress-section,
+.hg-party-section,
+.hg-move-section,
+.hg-personal-section,
+.hg-actions-section,
+.hg-leads-section,
+.hg-participants-section,
+.hg-gm-section,
+.hg-contract-select {
+  background-color: #1a0a05;
+  border: 1px solid #4a2c0a;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.hg-doom-section h2,
+.hg-progress-section h2,
+.hg-party-section h2,
+.hg-move-section h2,
+.hg-personal-section h2,
+.hg-actions-section h2,
+.hg-leads-section h2,
+.hg-participants-section h2,
+.hg-gm-section h2,
+.hg-contract-select h2 {
+  color: #C9813A;
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #4a2c0a;
+}
+
+.hg-doom-track {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.hg-doom-pip {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #4a2c0a;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7em;
+  font-family: 'Cinzel', serif;
+  color: #888780;
+  background-color: #120704;
+}
+
+.hg-doom-pip.filled {
+  background-color: #6b1515;
+  border-color: #C9813A;
+  color: #F5D7A0;
+}
+
+.hg-doom-pip.filled.alert   { background-color: #7a4a10; }
+.hg-doom-pip.filled.hostile { background-color: #8B2020; }
+.hg-doom-pip.filled.lethal  { background-color: #6b1515; border-color: #ff2222; }
+
+.hg-doom-status {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9em;
+  letter-spacing: 0.05em;
+}
+
+.hg-progress-track {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.hg-progress-pip {
+  width: 32px;
+  height: 20px;
+  border: 1px solid #4a2c0a;
+  border-radius: 2px;
+  background-color: #120704;
+}
+
+.hg-progress-pip.filled {
+  background-color: #2d6b2d;
+  border-color: #7fc47f;
+}
+
+.hg-pip-track {
+  display: flex;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.hg-pip {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #4a2c0a;
+  border-radius: 2px;
+  background-color: #120704;
+}
+
+.hg-pip.filled.stress { background-color: #6b1515; border-color: #C9813A; }
+.hg-pip.filled.ineb   { background-color: #7a4a10; border-color: #C9813A; }
+
+.hg-track-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.hg-track-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #C9813A;
+  min-width: 90px;
+}
+
+.hg-track-count {
+  font-size: 0.85em;
+  color: #888780;
+}
+
+.hg-vibe-value {
+  font-size: 1.4em;
+  font-family: 'Cinzel', serif;
+  color: #F5D7A0;
+}
+
+.hg-action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hg-move-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hg-move-controls select {
+  flex: 1;
+  min-width: 200px;
+}
+
+.hg-move-desc {
+  margin-top: 8px;
+  font-style: italic;
+  color: #888780;
+  font-size: 0.9em;
+}
+
+.hg-gm-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hg-contract-desc {
+  color: #888780;
+  font-size: 0.9em;
+  margin-top: 4px;
+}
+
+.hg-vibe-pool {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9em;
+  color: #C9813A;
+  margin-left: 12px;
+}
+
+// ── Lead cap display ─────────────────────────────────────────────────
+
+.hg-lead-cap {
+  font-size: 0.7em;
+  font-family: 'Lora', serif;
+  color: #888780;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.hg-lead-cap.hg-cap-full {
+  color: #cc4444;
+  font-weight: bold;
+}
+
+// Idle lead row styling
+.hg-lead-idle {
+  opacity: 0.7;
+}
+
+.hg-lead-idle td:first-child {
+  border-left: 3px solid #4a2c0a;
+}
+
+.hg-idle-badge {
+  display: inline-block;
+  font-size: 0.75em;
+  color: #888780;
+  border: 1px solid #4a2c0a;
+  padding: 1px 6px;
+  border-radius: 2px;
+  margin-top: 4px;
+  font-family: 'Lora', serif;
+}

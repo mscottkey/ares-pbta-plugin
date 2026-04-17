@@ -14,6 +14,7 @@ require_relative 'commands/advance_cmd'
 require_relative 'commands/tavern_cmd'
 require_relative 'commands/dungeon_cmd'
 require_relative 'commands/lead_cmd'
+require_relative 'commands/leads_cmd'
 require_relative 'commands/contract_cmd'
 require_relative 'web/char_profile_web'
 require_relative 'web/jobboard_web'
@@ -42,6 +43,7 @@ module AresMUSH
       when "sober"      then return SoberCmd
       when "dungeon"    then return DungeonCmd
       when "investigate", "lead" then return LeadCmd
+      when "leads"               then return LeadsCmd
       when "contract"   then return ContractCmd
       end
       nil
@@ -49,7 +51,8 @@ module AresMUSH
 
     def self.get_web_request_handler(request)
       case request.cmd
-      when "heroesguildJobBoard"     then return JobBoardRequestHandler
+      when "hgGuildBoard",
+           "heroesguildJobBoard"     then return GuildBoardRequestHandler
       when "initHeroesGuildStats"    then return InitStatsRequestHandler
       when "setHeroesGuildRole"      then return SetRoleRequestHandler
       when "setHeroesGuildGimmick"   then return SetGimmickRequestHandler
