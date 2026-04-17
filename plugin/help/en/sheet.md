@@ -1,4 +1,4 @@
-> **+sheet** — View a character sheet
+> **+sheet** - View a character sheet
 
 **Usage**
 ```

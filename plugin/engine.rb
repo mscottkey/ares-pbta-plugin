@@ -17,7 +17,7 @@ module AresMUSH
       end
 
       # Apply post-roll consequences to the character (XP on miss, stress on weak+doom>=4).
-      # Returns a data hash — the caller (CommandHandler) is responsible for t() translations.
+      # Returns a data hash - the caller (CommandHandler) is responsible for t() translations.
       # Keys: :xp_bump, :new_xp, :advance_ready, :stress_bump, :new_stress, :stress_max
       def self.consequence_data(char, result, doom_level = 0)
         data = { xp_bump: false, stress_bump: false, advance_ready: false }
@@ -38,7 +38,7 @@ module AresMUSH
         data
       end
 
-      # Increment doom on a contract. Returns data hash — caller handles t() translations.
+      # Increment doom on a contract. Returns data hash - caller handles t() translations.
       # Keys: :new_doom, :threshold (:alert/:hostile/:lethal/nil)
       def self.advance_doom(contract)
         new_doom = contract.doom_level.to_i + 1

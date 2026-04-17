@@ -13,7 +13,7 @@ module AresMUSH
         if role_name.nil?
           output = ["%xhAvailable Playbooks:%xn"]
           PbtA.playbook_list.each do |p|
-            output << "%xh#{p[:name]}%xn — #{p[:desc]}"
+            output << "%xh#{p[:name]}%xn - #{p[:desc]}"
             output << "  Stats: #{p[:stats]}"
             output << "  Core Moves: #{p[:core_moves].join(', ')}"
           end
@@ -42,7 +42,7 @@ module AresMUSH
         if gimmick_name.nil?
           output = ["%xhAvailable Gimmicks:%xn"]
           PbtA.gimmick_list.each do |g|
-            output << "%xh#{g[:name]}%xn — #{g[:desc]}"
+            output << "%xh#{g[:name]}%xn - #{g[:desc]}"
           end
           client.emit output.join("\n")
         else

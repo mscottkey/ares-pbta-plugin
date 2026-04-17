@@ -8,7 +8,7 @@
   <select onchange={{this.selectGimmickFromEvent}}>
     <option value="">-- Pick a Gimmick --</option>
     {{#each this.chargenData.gimmicks as |gimmick|}}
-      <option value={{gimmick.name}}>{{gimmick.name}} — {{gimmick.desc}}</option>
+      <option value={{gimmick.name}}>{{gimmick.name}} - {{gimmick.desc}}</option>
     {{/each}}
   </select>
 </div>

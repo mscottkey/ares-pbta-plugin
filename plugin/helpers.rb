@@ -1,7 +1,7 @@
 module AresMUSH
   module PbtA
 
-    # ── Stat & Move Helpers ──────────────────────────────────────────────────
+    # - Stat & Move Helpers -------------------------
 
     # Returns the character's effective stat value, applying Gimmick bonuses.
     def self.stat_value(char, stat_name, move_name: nil, room_name: nil)
@@ -47,7 +47,7 @@ module AresMUSH
       role_config ? role_config["stats"] : {}
     end
 
-    # ── Chargen Actions ──────────────────────────────────────────────────────
+    # - Chargen Actions ---------------------------
 
     # Sets the character's playbook and initializes stats from the role config.
     # Called by both client commands and web handlers.

@@ -26,7 +26,7 @@ module AresMUSH
       end
     end
 
-    # Returns roles and gimmicks list for the chargen UI (no login required — read-only).
+    # Returns roles and gimmicks list for the chargen UI (no login required - read-only).
     class ChargenDataRequestHandler
       def handle(request)
         {

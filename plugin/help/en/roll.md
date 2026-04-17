@@ -1,4 +1,4 @@
-> **+roll** — Roll a raw stat
+> **+roll** - Roll a raw stat
 
 **Usage**
 ```
@@ -12,9 +12,9 @@
 Rolls 2d6 + the named stat. If there is an active Dungeon Run in your room, a miss also advances the Doom clock.
 
 **Results**
-- **10+** Strong hit — you do it clean.
-- **7-9** Weak hit — you do it, but the GM picks a cost.
-- **6-** Miss — mark XP. Doom advances if a run is active.
+- **10+** Strong hit - you do it clean.
+- **7-9** Weak hit - you do it, but the GM picks a cost.
+- **6-** Miss - mark XP. Doom advances if a run is active.
 
 **Examples**
 ```
