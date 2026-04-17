@@ -1,5 +1,5 @@
 module AresMUSH
-  module HeroesGuild
+  module PbtA
     class MoveCmd
       include CommandHandler
 
@@ -14,49 +14,50 @@ module AresMUSH
       end
 
       def handle
-        move_config = HeroesGuild.find_move(move_name)
+        move_config = PbtA.find_move(move_name)
         unless move_config
-          client.emit_failure t('heroesguild.no_such_move', name: move_name)
+          client.emit_failure t('pbta.no_such_move', name: move_name)
           return
         end
 
-        unless HeroesGuild.char_has_move?(enactor, move_name)
-          client.emit_failure t('heroesguild.not_your_move', move: move_name)
+        unless PbtA.char_has_move?(enactor, move_name)
+          client.emit_failure t('pbta.not_your_move', move: move_name)
           return
         end
 
         stat_name = move_config["stat"]
         room_name = enactor.room ? enactor.room.name : ""
-        stat_val = HeroesGuild.stat_value(enactor, stat_name,
-                                          move_name: move_name,
-                                          room_name: room_name)
+        stat_val = PbtA.stat_value(enactor, stat_name,
+                                   move_name: move_name,
+                                   room_name: room_name)
 
         result = Engine.roll(stat_val)
         enactor.room.emit Engine.format_roll(enactor.name, move_name, stat_name, result)
         enactor.room.emit "%xc#{move_config['desc']}%xn"
 
-        run = HeroesGuild.active_dungeon_run(enactor.room)
+        run = defined?(HeroesGuild) && HeroesGuild.respond_to?(:active_dungeon_run) ?
+              HeroesGuild.active_dungeon_run(enactor.room) : nil
         doom_level = run ? run.doom_level.to_i : 0
         data = Engine.consequence_data(enactor, result, doom_level)
 
         if data[:xp_bump]
-          xp_msg = t('heroesguild.xp_gained', total: data[:new_xp])
-          enactor.room.emit t('heroesguild.miss', xp_msg: xp_msg)
-          client.emit t('heroesguild.advance_ready', name: enactor.name) if data[:advance_ready]
+          xp_msg = t('pbta.xp_gained', total: data[:new_xp])
+          enactor.room.emit t('pbta.miss', xp_msg: xp_msg)
+          client.emit t('pbta.advance_ready', name: enactor.name) if data[:advance_ready]
         end
         if data[:stress_bump]
-          enactor.room.emit t('heroesguild.stress_taken',
+          enactor.room.emit t('pbta.stress_taken',
                                name: enactor.name, amount: 1,
                                total: data[:new_stress], max: data[:stress_max])
         end
 
         if result[:tier] == :miss && run && run.status == "active"
           doom_data = Engine.advance_doom(run)
-          enactor.room.emit "%xr#{t('heroesguild.doom_increased', level: doom_data[:new_doom])}%xn"
+          enactor.room.emit "%xr#{t('pbta.doom_increased', level: doom_data[:new_doom])}%xn"
           case doom_data[:threshold]
-          when :alert   then enactor.room.emit "%xr#{t('heroesguild.doom_alert',   room: room_name)}%xn"
-          when :hostile then enactor.room.emit "%xr#{t('heroesguild.doom_hostile', room: room_name)}%xn"
-          when :lethal  then enactor.room.emit "%xr#{t('heroesguild.doom_lethal',  room: room_name)}%xn"
+          when :alert   then enactor.room.emit "%xr#{t('pbta.doom_alert',   room: room_name)}%xn"
+          when :hostile then enactor.room.emit "%xr#{t('pbta.doom_hostile', room: room_name)}%xn"
+          when :lethal  then enactor.room.emit "%xr#{t('pbta.doom_lethal',  room: room_name)}%xn"
           end
         end
       end

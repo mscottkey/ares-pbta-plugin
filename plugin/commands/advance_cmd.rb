@@ -1,5 +1,5 @@
 module AresMUSH
-  module HeroesGuild
+  module PbtA
     class AdvanceCmd
       include CommandHandler
 
@@ -15,7 +15,7 @@ module AresMUSH
           return
         end
 
-        xp_needed = Global.read_config("heroesguild", "xp_to_advance").to_i
+        xp_needed = Global.read_config("pbta", "xp_to_advance").to_i
         if enactor.pbta_xp.to_i < xp_needed
           client.emit_failure "You need #{xp_needed} XP to advance. You have #{enactor.pbta_xp.to_i}."
           return
@@ -49,8 +49,8 @@ module AresMUSH
 
       def handle_move_advance
         move_name = advance_target&.strip&.split&.map(&:capitalize)&.join(' ')
-        unless HeroesGuild.find_move(move_name)
-          client.emit_failure t('heroesguild.no_such_move', name: move_name)
+        unless PbtA.find_move(move_name)
+          client.emit_failure t('pbta.no_such_move', name: move_name)
           return
         end
         moves = enactor.pbta_moves || []

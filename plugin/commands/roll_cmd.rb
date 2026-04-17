@@ -1,5 +1,5 @@
 module AresMUSH
-  module HeroesGuild
+  module PbtA
     class RollCmd
       include CommandHandler
 
@@ -24,13 +24,14 @@ module AresMUSH
           return
         end
 
-        stat_val = HeroesGuild.stat_value(enactor, stat_name)
+        stat_val = PbtA.stat_value(enactor, stat_name)
         result = Engine.roll(stat_val, modifier)
 
         enactor.room.emit Engine.format_roll(enactor.name, stat_name.capitalize,
                                               stat_name, result)
 
-        run = HeroesGuild.active_dungeon_run(enactor.room)
+        run = defined?(HeroesGuild) && HeroesGuild.respond_to?(:active_dungeon_run) ?
+              HeroesGuild.active_dungeon_run(enactor.room) : nil
         doom_level = run ? run.doom_level.to_i : 0
 
         emit_consequences(Engine.consequence_data(enactor, result, doom_level))
@@ -44,23 +45,23 @@ module AresMUSH
 
       def emit_consequences(data)
         if data[:xp_bump]
-          xp_msg = t('heroesguild.xp_gained', total: data[:new_xp])
-          enactor.room.emit t('heroesguild.miss', xp_msg: xp_msg)
-          client.emit t('heroesguild.advance_ready', name: enactor.name) if data[:advance_ready]
+          xp_msg = t('pbta.xp_gained', total: data[:new_xp])
+          enactor.room.emit t('pbta.miss', xp_msg: xp_msg)
+          client.emit t('pbta.advance_ready', name: enactor.name) if data[:advance_ready]
         end
         if data[:stress_bump]
-          enactor.room.emit t('heroesguild.stress_taken',
+          enactor.room.emit t('pbta.stress_taken',
                                name: enactor.name, amount: 1,
                                total: data[:new_stress], max: data[:stress_max])
         end
       end
 
       def emit_doom(doom_data, room_name)
-        enactor.room.emit "%xr#{t('heroesguild.doom_increased', level: doom_data[:new_doom])}%xn"
+        enactor.room.emit "%xr#{t('pbta.doom_increased', level: doom_data[:new_doom])}%xn"
         case doom_data[:threshold]
-        when :alert   then enactor.room.emit "%xr#{t('heroesguild.doom_alert',   room: room_name)}%xn"
-        when :hostile then enactor.room.emit "%xr#{t('heroesguild.doom_hostile', room: room_name)}%xn"
-        when :lethal  then enactor.room.emit "%xr#{t('heroesguild.doom_lethal',  room: room_name)}%xn"
+        when :alert   then enactor.room.emit "%xr#{t('pbta.doom_alert',   room: room_name)}%xn"
+        when :hostile then enactor.room.emit "%xr#{t('pbta.doom_hostile', room: room_name)}%xn"
+        when :lethal  then enactor.room.emit "%xr#{t('pbta.doom_lethal',  room: room_name)}%xn"
         end
       end
     end

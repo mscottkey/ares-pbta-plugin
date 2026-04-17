@@ -3,10 +3,6 @@ shortcuts:
   move: move
   sheet: sheet
   advance: advance
-  carouse: carouse
-  dungeon: dungeon
-  investigate: investigate
-  contract: contract
 
 roles:
   Meatshield:

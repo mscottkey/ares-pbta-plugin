@@ -1,5 +1,5 @@
 module AresMUSH
-  module HeroesGuild
+  module PbtA
     class CharProfileWeb
       def self.get_fields(char, viewer)
         role = char.pbta_role
@@ -9,17 +9,17 @@ module AresMUSH
         gimmick = char.pbta_gimmick
         xp = char.pbta_xp.to_i
         stress = char.pbta_stress.to_i
-        xp_max = Global.read_config("heroesguild", "xp_to_advance").to_i
-        stress_max = Global.read_config("heroesguild", "stress_max").to_i
+        xp_max = Global.read_config("pbta", "xp_to_advance").to_i
+        stress_max = Global.read_config("pbta", "stress_max").to_i
 
-        role_config = Global.read_config("heroesguild", "roles")[role] || {}
+        role_config = Global.read_config("pbta", "roles")[role] || {}
         role_moves = role_config["core_moves"] || []
         learned_moves = char.pbta_moves || []
         all_move_names = (role_moves + learned_moves).uniq
 
-        moves_config = Global.read_config("heroesguild", "moves")
+        moves_config = Global.read_config("pbta", "moves")
         all_moves_data = all_move_names.map do |name|
-          move_def = moves_config["universal"][name] || 
+          move_def = moves_config["universal"][name] ||
                      moves_config["role_specific"][name] || {}
           { name: name, desc: move_def["desc"] || "", stat: move_def["stat"] || "" }
         end
