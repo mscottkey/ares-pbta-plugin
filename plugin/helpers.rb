@@ -9,7 +9,7 @@ module AresMUSH
       gimmick = char.pbta_gimmick
       return base unless gimmick
 
-      gimmick_config = Global.read_config("pbta", "gimmicks")[gimmick]
+      gimmick_config = Global.read_config("pbta_stats", "gimmicks")[gimmick]
       return base unless gimmick_config
 
       bonus = 0
@@ -26,7 +26,7 @@ module AresMUSH
 
     # Returns the move config hash for a named move, or nil.
     def self.find_move(move_name)
-      moves = Global.read_config("pbta", "moves")
+      moves = Global.read_config("pbta_stats", "moves")
       moves["universal"][move_name] ||
         moves["role_specific"][move_name]
     end
@@ -36,14 +36,14 @@ module AresMUSH
       return true if char.pbta_moves.include?(move_name)
       role = char.pbta_role
       return false unless role
-      role_config = Global.read_config("pbta", "roles")[role]
+      role_config = Global.read_config("pbta_stats", "roles")[role]
       return false unless role_config
       role_config["core_moves"].include?(move_name)
     end
 
     # Returns the role's base stat hash for a given role name.
     def self.role_stats(role_name)
-      role_config = Global.read_config("pbta", "roles")[role_name]
+      role_config = Global.read_config("pbta_stats", "roles")[role_name]
       role_config ? role_config["stats"] : {}
     end
 
@@ -54,7 +54,7 @@ module AresMUSH
     # Returns { success: true } or { error: "message" }
     def self.set_playbook(char, role_name)
       return { error: "No role specified." } if role_name.nil? || role_name.empty?
-      roles = Global.read_config("pbta", "roles")
+      roles = Global.read_config("pbta_stats", "roles")
       return { error: "Config error: pbta.yml missing or has no 'roles' key. Check game/config/pbta.yml is deployed." } if roles.nil?
       return { error: "Invalid playbook '#{role_name}'." } unless roles[role_name]
       stats = roles[role_name]["stats"].stringify_keys
@@ -66,7 +66,7 @@ module AresMUSH
     # Returns { success: true } or { error: "message" }
     def self.set_gimmick(char, gimmick_name)
       return { error: "No gimmick specified." } if gimmick_name.nil? || gimmick_name.empty?
-      gimmicks = Global.read_config("pbta", "gimmicks")
+      gimmicks = Global.read_config("pbta_stats", "gimmicks")
       return { error: "Invalid gimmick '#{gimmick_name}'." } unless gimmicks[gimmick_name]
       char.update(pbta_gimmick: gimmick_name)
       { success: true }
@@ -74,7 +74,7 @@ module AresMUSH
 
     # Lists all available playbooks for display.
     def self.playbook_list
-      (Global.read_config("pbta", "roles") || {}).map do |name, cfg|
+      (Global.read_config("pbta_stats", "roles") || {}).map do |name, cfg|
         stats = (cfg["stats"] || {}).map { |s, v| "#{s}: #{v.to_i >= 0 ? '+' : ''}#{v}" }.join(", ")
         { name: name, desc: cfg["desc"], stats: stats,
           core_moves: cfg["core_moves"] || [] }
@@ -83,7 +83,7 @@ module AresMUSH
 
     # Lists all available gimmicks for display.
     def self.gimmick_list
-      (Global.read_config("pbta", "gimmicks") || {}).map do |name, cfg|
+      (Global.read_config("pbta_stats", "gimmicks") || {}).map do |name, cfg|
         { name: name, desc: cfg["desc"] }
       end
     end
@@ -92,12 +92,12 @@ module AresMUSH
     def self.char_moves_for_web(char)
       role_moves = []
       if char.pbta_role
-        role_config = Global.read_config("pbta", "roles")[char.pbta_role]
+        role_config = Global.read_config("pbta_stats", "roles")[char.pbta_role]
         role_moves = role_config ? (role_config["core_moves"] || []) : []
       end
       all_move_names = (role_moves + (char.pbta_moves || [])).uniq
 
-      moves_config = Global.read_config("pbta", "moves")
+      moves_config = Global.read_config("pbta_stats", "moves")
       all_move_names.map do |name|
         move_def = moves_config["universal"][name] ||
                    moves_config["role_specific"][name] || {}

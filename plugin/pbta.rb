@@ -16,7 +16,7 @@ module AresMUSH
     end
 
     def self.shortcuts
-      Global.read_config("pbta", "shortcuts")
+      Global.read_config("pbta_misc", "shortcuts")
     end
 
     def self.get_cmd_handler(client, cmd, enactor)
