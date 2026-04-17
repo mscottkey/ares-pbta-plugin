@@ -9,24 +9,64 @@ shortcuts:
 roles:
   Meatshield:
     desc: "Big, hit things, take hits."
-    stats: { brawn: 2, heart: 1, flow: 0, cunning: -1, luck: 0 }
-    core_moves: ["Hack and Slash", "Defy Danger", "Stand Firm"]
+    stats:
+      brawn: 2
+      heart: 1
+      flow: 0
+      cunning: -1
+      luck: 0
+    core_moves:
+    - Hack and Slash
+    - Defy Danger
+    - Stand Firm
   Shadowfoot:
     desc: "Sneak, steal, survive."
-    stats: { brawn: -1, heart: 0, flow: 1, cunning: 2, luck: 0 }
-    core_moves: ["Pick Pockets", "Vanish", "Defy Danger"]
+    stats:
+      brawn: -1
+      heart: 0
+      flow: 1
+      cunning: 2
+      luck: 0
+    core_moves:
+    - Pick Pockets
+    - Vanish
+    - Defy Danger
   Arcanist:
     desc: "Magic is just physics you haven't broken yet."
-    stats: { brawn: -1, heart: 0, flow: 2, cunning: 1, luck: 0 }
-    core_moves: ["Unleash", "Attune", "Defy Danger"]
+    stats:
+      brawn: -1
+      heart: 0
+      flow: 2
+      cunning: 1
+      luck: 0
+    core_moves:
+    - Unleash
+    - Attune
+    - Defy Danger
   Heartspeaker:
     desc: "Words are weapons. Relationships are armor."
-    stats: { brawn: -1, heart: 2, flow: 0, cunning: 1, luck: 0 }
-    core_moves: ["Parley", "Inspire", "Defy Danger"]
+    stats:
+      brawn: -1
+      heart: 2
+      flow: 0
+      cunning: 1
+      luck: 0
+    core_moves:
+    - Parley
+    - Inspire
+    - Defy Danger
   Wildcardigan:
     desc: "No plan. No fear. Impressive survival rate, somehow."
-    stats: { brawn: 0, heart: 0, flow: 0, cunning: 0, luck: 3 }
-    core_moves: ["Hail Mary", "Lucky Break", "Defy Danger"]
+    stats:
+      brawn: 0
+      heart: 0
+      flow: 0
+      cunning: 0
+      luck: 3
+    core_moves:
+    - Hail Mary
+    - Lucky Break
+    - Defy Danger
 
 gimmicks:
   The Drunk:
@@ -95,6 +135,6 @@ stress_max: 5
 xp_to_advance: 10
 
 # Investigation caps
-lead_player_cap: 1      # Max open leads per player at one time
-lead_global_cap: 10     # Max open leads across all players
-lead_inactive_days: 14  # Default suggestion only - flush uses a command arg
+lead_player_cap: 1
+lead_global_cap: 10
+lead_inactive_days: 14
