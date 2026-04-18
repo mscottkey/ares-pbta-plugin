@@ -7,12 +7,18 @@ export default Component.extend({
   flashMessages: service(),
 
   actions: {
+    closeModal() {
+      this.onClose();
+    },
+
     hgRollStat(statKey) {
       this.gameApi.requestOne('pbta_roll_stat',
         { scene_id: this.scene.id, stat: statKey }, null)
         .then((result) => {
           if (result.error) {
             this.flashMessages.danger(result.error);
+          } else {
+            this.onClose();
           }
         });
     },
@@ -23,6 +29,8 @@ export default Component.extend({
         .then((result) => {
           if (result.error) {
             this.flashMessages.danger(result.error);
+          } else {
+            this.onClose();
           }
         });
     }

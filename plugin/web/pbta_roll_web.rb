@@ -2,8 +2,7 @@ module AresMUSH
   module PbtA
     class PbtaRollStatRequestHandler
       def handle(request)
-        error = WebHelpers.check_login(request)
-        return error if error
+        return { error: t('webportal.not_logged_in') } unless request.enactor
 
         char = request.enactor
         scene_id = request.args["scene_id"]
@@ -46,8 +45,7 @@ module AresMUSH
 
     class PbtaRollMoveRequestHandler
       def handle(request)
-        error = WebHelpers.check_login(request)
-        return error if error
+        return { error: t('webportal.not_logged_in') } unless request.enactor
 
         char = request.enactor
         scene_id = request.args["scene_id"]

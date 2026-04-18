@@ -1,40 +1,10 @@
-{{#if this.custom.pbta}}
-  <li>
-    <a href="#" {{action (mut this.selectPbtaRoll) true}}
-       class="dropdown-item">PbtA Roll</a>
-  </li>
-{{/if}}
-
-{{#if this.custom.heroesguild.dungeon_run_id}}
-  <li>
-    <a href="/heroesguild/dungeon/{{this.custom.heroesguild.dungeon_run_id}}"
-       target="_blank" class="dropdown-item">Dungeon HUD ↗</a>
-  </li>
-  <li>
-    <a href="#" {{action 'hgEndDungeonRun'}} class="dropdown-item">End Dungeon Run</a>
-  </li>
-{{else}}
-  <li>
-    <a href="#" {{action 'hgStartDungeonRun'}} class="dropdown-item">Start Dungeon Run</a>
-  </li>
-{{/if}}
-
-{{#if this.custom.heroesguild.tavern_night_id}}
-  <li>
-    <a href="/heroesguild/tavern/{{this.custom.heroesguild.tavern_night_id}}"
-       target="_blank" class="dropdown-item">Tavern HUD ↗</a>
-  </li>
-  <li>
-    <a href="#" {{action 'hgCloseTavernNight'}} class="dropdown-item">Close Tavern Night</a>
-  </li>
-{{else}}
-  <li>
-    <a href="#" {{action 'hgStartTavernNight'}} class="dropdown-item">Open Tavern Night</a>
-  </li>
-{{/if}}
+<li>
+  <a href="#" {{action (mut this.selectPbtaRoll) true}} class="dropdown-item">PbtA Roll</a>
+</li>
 
 <PbtaRoll
   @scene={{this.scene}}
   @stats={{this.custom.pbta.stats}}
   @moves={{this.custom.pbta.all_moves}}
-  @selectPbtaRoll={{this.selectPbtaRoll}} />
+  @selectPbtaRoll={{this.selectPbtaRoll}}
+  @onClose={{action (mut this.selectPbtaRoll) false}} />

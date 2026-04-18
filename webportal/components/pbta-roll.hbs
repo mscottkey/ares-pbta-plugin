@@ -1,25 +1,30 @@
 {{#if this.selectPbtaRoll}}
-  <div class="hg-scene-roll-panel">
-    <div class="hg-scene-section-label">Stats</div>
-    <div class="hg-scene-stat-row">
-      {{#each this.stats as |stat|}}
-        <button class="btn btn-sm hg-scene-stat-btn"
-          {{action "hgRollStat" stat.key}}>
-          <span class="hg-scene-stat-name">{{stat.name}}</span>
-          <span class="hg-scene-stat-val">{{stat.display}}</span>
-        </button>
-      {{/each}}
+  <div class="pbta-modal-backdrop" {{action "closeModal"}}></div>
+  <div class="pbta-modal" role="dialog">
+    <div class="pbta-modal-header">
+      <span>PbtA Roll</span>
+      <button class="pbta-modal-close" {{action "closeModal"}}>✕</button>
     </div>
-    {{#if this.moves.length}}
-      <div class="hg-scene-section-label">Moves</div>
-      <div class="hg-scene-move-row">
-        {{#each this.moves as |move|}}
-          <button class="btn btn-sm hg-scene-move-btn"
-            {{action "hgRollMove" move.name}}>
-            {{move.name}}
+    <div class="pbta-modal-body">
+      <div class="hg-scene-section-label">Stats</div>
+      <div class="hg-scene-stat-row">
+        {{#each this.stats as |stat|}}
+          <button class="btn btn-sm hg-scene-stat-btn" {{action "hgRollStat" stat.key}}>
+            <span class="hg-scene-stat-name">{{stat.name}}</span>
+            <span class="hg-scene-stat-val">{{stat.display}}</span>
           </button>
         {{/each}}
       </div>
-    {{/if}}
+      {{#if this.moves.length}}
+        <div class="hg-scene-section-label pbta-moves-label">Moves</div>
+        <div class="hg-scene-move-row">
+          {{#each this.moves as |move|}}
+            <button class="btn btn-sm hg-scene-move-btn" {{action "hgRollMove" move.name}}>
+              {{move.name}}
+            </button>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
   </div>
 {{/if}}
