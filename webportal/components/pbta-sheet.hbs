@@ -1,0 +1,46 @@
+{{#if @char.custom.pbta.role}}
+  <div class="hg-header">
+    <span class="hg-role">{{@char.custom.pbta.role}}</span>
+    <span class="hg-gimmick">{{@char.custom.pbta.gimmick}}</span>
+  </div>
+
+  <div class="hg-stats">
+    {{#each-in @char.custom.pbta.stats as |stat value|}}
+      <div class="hg-stat">
+        <div class="hg-stat-name">{{stat}}</div>
+        <div class="hg-stat-value">{{value}}</div>
+      </div>
+    {{/each-in}}
+  </div>
+
+  <div class="hg-tracks">
+    <div class="hg-track">
+      <span class="label">Stress</span>
+      <div class="track-bar">
+        {{#each @char.custom.pbta.stress_pips as |pip|}}
+          <div class="pip {{if pip.filled 'filled'}}"></div>
+        {{/each}}
+      </div>
+    </div>
+    <div class="hg-track">
+      <span class="label">XP</span>
+      <div class="track-bar">
+        {{#each @char.custom.pbta.xp_pips as |pip|}}
+          <div class="pip {{if pip.filled 'filled'}}"></div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+  <div class="hg-moves">
+    <h4>Moves</h4>
+    {{#each @char.custom.pbta.all_moves as |move|}}
+      <div class="hg-move">
+        <strong>{{move.name}}</strong>
+        <p>{{move.desc}}</p>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <p>Playbook not yet initialized.</p>
+{{/if}}
