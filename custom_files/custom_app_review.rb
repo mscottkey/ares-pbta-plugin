@@ -4,7 +4,7 @@ module AresMUSH
       def self.app_review(char)
         errors = []
         if !char.pbta_stats || char.pbta_stats.empty?
-          errors << "You must click 'Auto-Populate Playbook Stats' in the Playbook Setup stage."
+          errors << "You must click 'Initialize Playbook Stats' in the Playbook Setup stage."
         end
         if !char.pbta_gimmick
           errors << "You must select a Gimmick in the Playbook chargen stage."
