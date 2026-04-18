@@ -7,7 +7,7 @@ export default Component.extend({
   flashMessages: service(),
 
   actions: {
-    closeModal() {
+    cancelRoll() {
       this.onClose();
     },
 
