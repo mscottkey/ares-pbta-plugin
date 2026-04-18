@@ -35,15 +35,13 @@ export default Component.extend({
   },
 
   @action
-  selectGimmickFromEvent(event) {
-    const gimmickName = event.target.value;
-    if (!gimmickName) { return; }
+  selectGimmick(gimmickName) {
     this.gameApi.requestOne('setHeroesGuildGimmick', { gimmick: gimmickName }, null)
       .then((response) => {
         if (response.error) {
           this.flashMessages.danger(response.error);
         } else {
-          this.flashMessages.success('Gimmick selected!');
+          this.flashMessages.success(`${gimmickName} selected!`);
           this.loadChargenData();
           if (this.updated) { this.updated(); }
         }

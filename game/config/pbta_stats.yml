@@ -64,15 +64,18 @@ pbta:
   gimmicks:
     The Drunk:
       desc: "+1 Luck when in the Tavern."
+      lore: "Luck powers your Hail Mary move - the desperate, last-resort roll you make when everything else has gone wrong. A night of drinking at the Tavern before a delve gives you that reckless edge. This bonus only applies while you're actually in the Tavern room, so use it before you head into the dungeon."
       bonus_stat: luck
       bonus_value: 1
       location_required: Tavern
     Dungeon Veteran:
       desc: "+1 to Defy Danger when Doom >= 7."
+      lore: "Defy Danger is the move you roll when something bad is about to happen and you act to avoid it - dodging a trap, outrunning a collapse, resisting a spell. Doom is a counter that tracks how dire the dungeon situation has become. At 7+, you're in the Hostile zone: things are going very wrong. Veterans have seen it all before and keep their cool precisely when amateurs panic."
       move_bonus: "Defy Danger"
       doom_threshold: 7
     Guild Rat:
       desc: "+1 Heart for Investigate moves."
+      lore: "Investigate is how you dig for information and uncover leads - talking to locals, reading the room, following a trail. Heart represents your social savvy and personal connections. Guild Rats have been around long enough to know everybody, and everybody owes them a favor. That network makes you a better investigator than your cunning alone would suggest."
       move_bonus: Investigate
       stat_override: heart
   moves:

@@ -15,14 +15,14 @@ module AresMUSH
     class SetRoleRequestHandler
       def handle(request)
         return { error: t('webportal.not_logged_in') } unless request.enactor
-        PbtA.set_playbook(request.enactor, request.args[:role])
+        PbtA.set_playbook(request.enactor, request.args["role"])
       end
     end
 
     class SetGimmickRequestHandler
       def handle(request)
         return { error: t('webportal.not_logged_in') } unless request.enactor
-        PbtA.set_gimmick(request.enactor, request.args[:gimmick])
+        PbtA.set_gimmick(request.enactor, request.args["gimmick"])
       end
     end
 

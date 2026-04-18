@@ -8,20 +8,29 @@
 
   <hr />
 
-  <p><strong>Gimmick:</strong>
-    {{#if this.chargenData.char_gimmick}}
-      {{this.chargenData.char_gimmick}}
-    {{else}}
-      None selected.
-    {{/if}}
-  </p>
+  <h4>Choose Your Gimmick</h4>
+  <p class="text-muted">Your Gimmick is a passive bonus that reflects a special edge your character has. Choose one.</p>
 
-  <select onchange={{this.selectGimmickFromEvent}}>
-    <option value="">-- Pick a Gimmick --</option>
-    {{#each this.chargenData.gimmicks as |gimmick|}}
-      <option value={{gimmick.name}} selected={{eq gimmick.name this.chargenData.char_gimmick}}>
-        {{gimmick.name}} - {{gimmick.desc}}
-      </option>
-    {{/each}}
-  </select>
+  {{#each this.chargenData.gimmicks as |gimmick|}}
+    <div class="card mb-3 {{if (eq gimmick.name this.chargenData.char_gimmick) "border-primary"}}">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h5 class="card-title mb-1">{{gimmick.name}}</h5>
+            <p class="card-text mb-1"><strong>{{gimmick.desc}}</strong></p>
+            <p class="card-text text-muted">{{gimmick.lore}}</p>
+          </div>
+          <div class="ms-3">
+            {{#if (eq gimmick.name this.chargenData.char_gimmick)}}
+              <span class="badge bg-primary">Selected</span>
+            {{else}}
+              <button class="btn btn-outline-primary btn-sm" {{on "click" (fn this.selectGimmick gimmick.name)}}>
+                Select
+              </button>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
 {{/if}}

@@ -84,7 +84,7 @@ module AresMUSH
     # Lists all available gimmicks for display.
     def self.gimmick_list
       (Global.read_config("pbta", "gimmicks") || {}).map do |name, cfg|
-        { name: name, desc: cfg["desc"] }
+        { name: name, desc: cfg["desc"], lore: cfg["lore"] }
       end
     end
 
