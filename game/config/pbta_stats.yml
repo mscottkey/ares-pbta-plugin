@@ -1,5 +1,5 @@
 ---
-pbta_stats:
+pbta:
   roles:
     Meatshield:
       desc: "Big, hit things, take hits."

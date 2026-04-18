@@ -15,7 +15,7 @@ module AresMUSH
           return
         end
 
-        xp_needed = Global.read_config("pbta_misc", "xp_to_advance").to_i
+        xp_needed = Global.read_config("pbta", "xp_to_advance").to_i
         if enactor.pbta_xp.to_i < xp_needed
           client.emit_failure "You need #{xp_needed} XP to advance. You have #{enactor.pbta_xp.to_i}."
           return

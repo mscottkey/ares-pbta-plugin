@@ -26,14 +26,14 @@ module AresMUSH
           char.update(pbta_xp: new_xp)
           data[:xp_bump] = true
           data[:new_xp] = new_xp
-          xp_to_advance = Global.read_config("pbta_misc", "xp_to_advance").to_i
+          xp_to_advance = Global.read_config("pbta", "xp_to_advance").to_i
           data[:advance_ready] = (new_xp >= xp_to_advance)
         elsif result[:tier] == :weak && doom_level >= 4
           new_stress = char.pbta_stress.to_i + 1
           char.update(pbta_stress: new_stress)
           data[:stress_bump] = true
           data[:new_stress] = new_stress
-          data[:stress_max] = Global.read_config("pbta_misc", "stress_max").to_i
+          data[:stress_max] = Global.read_config("pbta", "stress_max").to_i
         end
         data
       end
