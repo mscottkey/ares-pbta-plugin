@@ -1,11 +1,11 @@
-{{#if @char.custom.pbta.role}}
+{{#if this.char.custom.pbta.role}}
   <div class="hg-header">
-    <span class="hg-role">{{@char.custom.pbta.role}}</span>
-    <span class="hg-gimmick">{{@char.custom.pbta.gimmick}}</span>
+    <span class="hg-role">{{this.char.custom.pbta.role}}</span>
+    <span class="hg-gimmick">{{this.char.custom.pbta.gimmick}}</span>
   </div>
 
   <div class="hg-stats">
-    {{#each @char.custom.pbta.stats as |stat|}}
+    {{#each this.char.custom.pbta.stats as |stat|}}
       <div class="hg-stat">
         <div class="hg-stat-name">{{stat.name}}</div>
         <div class="hg-stat-value">{{stat.value}}</div>
@@ -17,7 +17,7 @@
     <div class="hg-track">
       <span class="label">Stress</span>
       <div class="track-bar">
-        {{#each @char.custom.pbta.stress_pips as |pip|}}
+        {{#each this.char.custom.pbta.stress_pips as |pip|}}
           <div class="pip {{if pip.filled 'filled'}}"></div>
         {{/each}}
       </div>
@@ -25,7 +25,7 @@
     <div class="hg-track">
       <span class="label">XP</span>
       <div class="track-bar">
-        {{#each @char.custom.pbta.xp_pips as |pip|}}
+        {{#each this.char.custom.pbta.xp_pips as |pip|}}
           <div class="pip {{if pip.filled 'filled'}}"></div>
         {{/each}}
       </div>
@@ -34,7 +34,7 @@
 
   <div class="hg-moves">
     <h4>Moves</h4>
-    {{#each @char.custom.pbta.all_moves as |move|}}
+    {{#each this.char.custom.pbta.all_moves as |move|}}
       <div class="hg-move">
         <strong>{{move.name}}</strong>
         <p>{{move.desc}}</p>
