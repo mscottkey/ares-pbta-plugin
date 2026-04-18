@@ -1,88 +1,62 @@
 module AresMUSH
   module PbtA
-    class PbtaRollStatRequestHandler
+    class RollStatFromSceneRequestHandler
       def handle(request)
-        return { error: t('webportal.not_logged_in') } unless request.enactor
+        error = AresMUSH::WebHelpers.check_login(request)
+        return error if error
 
         char = request.enactor
-        scene_id = request.args["scene_id"]
-        stat_name = request.args["stat"]
-
-        return { error: "No stat specified." } if stat_name.nil? || stat_name.empty?
+        stat = request.args[:stat] || request.args["stat"]
+        scene = AresMUSH::Scene[request.args[:scene_id] || request.args["scene_id"]]
 
         valid_stats = %w[brawn cunning flow heart luck]
-        return { error: "Invalid stat '#{stat_name}'." } unless valid_stats.include?(stat_name)
-
-        scene = AresMUSH::Scene[scene_id]
+        return { error: "Invalid stat." } unless valid_stats.include?(stat)
         return { error: "Scene not found." } unless scene
 
-        room = scene.room
-        stat_val = PbtA.stat_value(char, stat_name, room_name: room&.name)
-        result = Engine.roll(stat_val, 0)
+        stat_val = PbtA.stat_value(char, stat, room_name: scene.room&.name || "")
+        result = Engine.roll(stat_val)
+        output = Engine.format_roll(char.name, stat.capitalize, stat, result)
 
-        room.emit Engine.format_roll(char.name, stat_name.capitalize, stat_name, result) if room
-
-        run = (defined?(HeroesGuild) && room) ? HeroesGuild.active_dungeon_run(room) : nil
-        doom_level = run ? run.doom_level.to_i : 0
-        data = Engine.consequence_data(char, result, doom_level)
-
-        if data[:xp_bump]
-          room.emit "#{char.name} gains XP on a miss. (#{data[:new_xp]} total)" if room
-          room.emit "#{char.name} can now advance!" if data[:advance_ready] && room
-        end
-        if data[:stress_bump]
-          room.emit "#{char.name} takes 1 stress. (#{data[:new_stress]}/#{data[:stress_max]})" if room
-        end
-
-        if result[:tier] == :miss && run&.status == "active"
-          doom_data = Engine.advance_doom(run)
-          room.emit "%xrDoom increases to #{doom_data[:new_doom]}.%xn" if room
-        end
+        scene.room.emit(output) if scene.room
+        Scenes.add_to_scene(scene, output, char, false, false)
 
         {}
       end
     end
 
-    class PbtaRollMoveRequestHandler
+    class RollMoveFromSceneRequestHandler
       def handle(request)
-        return { error: t('webportal.not_logged_in') } unless request.enactor
+        error = AresMUSH::WebHelpers.check_login(request)
+        return error if error
 
         char = request.enactor
-        scene_id = request.args["scene_id"]
-        move_name = request.args["move"]
-
-        return { error: "No move specified." } if move_name.nil? || move_name.empty?
+        move_name = request.args[:move] || request.args["move"]
+        scene = AresMUSH::Scene[request.args[:scene_id] || request.args["scene_id"]]
 
         move_config = PbtA.find_move(move_name)
-        return { error: "Move '#{move_name}' not found." } unless move_config
+        return { error: "Move not found." } unless move_config
         return { error: "You don't have that move." } unless PbtA.char_has_move?(char, move_name)
-
-        scene = AresMUSH::Scene[scene_id]
         return { error: "Scene not found." } unless scene
 
-        room = scene.room
         stat_name = move_config["stat"]
-        stat_val = PbtA.stat_value(char, stat_name, move_name: move_name, room_name: room&.name)
-        result = Engine.roll(stat_val, 0)
+        stat_val = PbtA.stat_value(char, stat_name,
+                                   move_name: move_name,
+                                   room_name: scene.room&.name || "")
 
-        room.emit Engine.format_roll(char.name, move_name, stat_name, result) if room
-        room.emit "%xc#{move_config['desc']}%xn" if room
+        result = Engine.roll(stat_val)
+        output = Engine.format_roll(char.name, move_name, stat_name, result)
+        move_output = "%xc#{move_config['desc']}%xn"
 
-        run = (defined?(HeroesGuild) && room) ? HeroesGuild.active_dungeon_run(room) : nil
-        doom_level = run ? run.doom_level.to_i : 0
+        scene.room.emit(output) if scene.room
+        scene.room.emit(move_output) if scene.room
+        Scenes.add_to_scene(scene, "#{output}\n#{move_output}", char, false, false)
+
+        doom_level = 0
         data = Engine.consequence_data(char, result, doom_level)
-
         if data[:xp_bump]
-          room.emit "#{char.name} gains XP on a miss. (#{data[:new_xp]} total)" if room
-          room.emit "#{char.name} can now advance!" if data[:advance_ready] && room
-        end
-        if data[:stress_bump]
-          room.emit "#{char.name} takes 1 stress. (#{data[:new_stress]}/#{data[:stress_max]})" if room
-        end
-
-        if result[:tier] == :miss && run&.status == "active"
-          doom_data = Engine.advance_doom(run)
-          room.emit "%xrDoom increases to #{doom_data[:new_doom]}.%xn" if room
+          xp_msg = "XP: #{data[:new_xp]}/#{Global.read_config('pbta', 'xp_to_advance')}"
+          msg = "Miss! Mark XP. #{xp_msg}"
+          scene.room.emit(msg) if scene.room
         end
 
         {}

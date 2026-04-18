@@ -39,8 +39,8 @@ module AresMUSH
       when "setHeroesGuildRole"     then return SetRoleRequestHandler
       when "setHeroesGuildGimmick"  then return SetGimmickRequestHandler
       when "heroesguildChargenData" then return ChargenDataRequestHandler
-      when "pbta_roll_stat"         then return PbtaRollStatRequestHandler
-      when "pbta_roll_move"         then return PbtaRollMoveRequestHandler
+      when "pbtaRollStat"           then return RollStatFromSceneRequestHandler
+      when "pbtaRollMove"           then return RollMoveFromSceneRequestHandler
       end
       nil
     end

@@ -3,8 +3,10 @@
 </li>
 
 <PbtaRoll
-  @scene={{this.scene}}
   @stats={{this.custom.pbta.stats}}
   @moves={{this.custom.pbta.all_moves}}
+  @scene={{this.scene}}
   @selectPbtaRoll={{this.selectPbtaRoll}}
-  @onClose={{action (mut this.selectPbtaRoll) false}} />
+  @onClose={{action (mut this.selectPbtaRoll) false}}
+  @onRollStat={{action "pbtaRollStat"}}
+  @onRollMove={{action "pbtaRollMove"}} />

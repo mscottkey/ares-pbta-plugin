@@ -8,7 +8,7 @@
   <div class="hg-scene-section-label">Stats</div>
   <div class="hg-scene-stat-row">
     {{#each this.stats as |stat|}}
-      <button class="btn btn-sm hg-scene-stat-btn" {{action "hgRollStat" stat.key}}>
+      <button class="btn btn-sm hg-scene-stat-btn" {{action "pbtaRollStat" stat.key}}>
         <span class="hg-scene-stat-name">{{stat.name}}</span>
         <span class="hg-scene-stat-val">{{stat.display}}</span>
       </button>
@@ -19,7 +19,7 @@
     <div class="hg-scene-section-label pbta-moves-label">Moves</div>
     <div class="hg-scene-move-row">
       {{#each this.moves as |move|}}
-        <button class="btn btn-sm hg-scene-move-btn" {{action "hgRollMove" move.name}}>
+        <button class="btn btn-sm hg-scene-move-btn" {{action "pbtaRollMove" move.name}}>
           {{move.name}}
         </button>
       {{/each}}
