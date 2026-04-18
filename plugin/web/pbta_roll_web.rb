@@ -2,8 +2,7 @@ module AresMUSH
   module PbtA
     class RollStatFromSceneRequestHandler
       def handle(request)
-        error = AresMUSH::WebHelpers.check_login(request)
-        return error if error
+        return { error: t('webportal.not_logged_in') } unless request.enactor
 
         char = request.enactor
         stat = request.args[:stat] || request.args["stat"]
@@ -26,8 +25,7 @@ module AresMUSH
 
     class RollMoveFromSceneRequestHandler
       def handle(request)
-        error = AresMUSH::WebHelpers.check_login(request)
-        return error if error
+        return { error: t('webportal.not_logged_in') } unless request.enactor
 
         char = request.enactor
         move_name = request.args[:move] || request.args["move"]
@@ -55,8 +53,7 @@ module AresMUSH
         data = Engine.consequence_data(char, result, doom_level)
         if data[:xp_bump]
           xp_msg = "XP: #{data[:new_xp]}/#{Global.read_config('pbta', 'xp_to_advance')}"
-          msg = "Miss! Mark XP. #{xp_msg}"
-          scene.room.emit(msg) if scene.room
+          scene.room.emit("Miss! Mark XP. #{xp_msg}") if scene.room
         end
 
         {}
