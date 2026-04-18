@@ -286,3 +286,231 @@
   margin-top: 4px;
   font-family: 'Lora', serif;
 }
+
+// ═══════════════════════════════════════════════════════════
+// PbtA Character Sheet — Profile Tab
+// ═══════════════════════════════════════════════════════════
+
+// ── Header ──────────────────────────────────────────────────
+
+.pbta-sheet-header {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  background: #1a0a05;
+  border: 1px solid #4a2c0a;
+  border-radius: 4px;
+}
+
+.pbta-role-block,
+.pbta-gimmick-block {
+  flex: 1;
+}
+
+.pbta-role-label,
+.pbta-gimmick-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #C9813A;
+  margin-bottom: 4px;
+}
+
+.pbta-role-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3em;
+  color: #F5D7A0;
+  letter-spacing: 0.04em;
+}
+
+.pbta-gimmick-name {
+  font-family: 'Lora', serif;
+  font-size: 1em;
+  color: #FDF6EC;
+  font-style: italic;
+}
+
+// ── Stats Row ────────────────────────────────────────────────
+
+.pbta-stats-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.pbta-stat-box {
+  flex: 1;
+  min-width: 70px;
+  background: #120704;
+  border: 1px solid #4a2c0a;
+  border-radius: 4px;
+  padding: 10px 6px 8px;
+  text-align: center;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: #C9813A;
+  }
+}
+
+.pbta-stat-value {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6em;
+  font-weight: bold;
+  color: #888780;
+  line-height: 1;
+  margin-bottom: 6px;
+
+  &.positive {
+    color: #F5D7A0;
+  }
+
+  &.negative {
+    color: #6b1515;
+  }
+}
+
+.pbta-stat-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #C9813A;
+}
+
+// ── Tracks Row ───────────────────────────────────────────────
+
+.pbta-tracks-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.pbta-track-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a0a05;
+  border: 1px solid #4a2c0a;
+  border-radius: 4px;
+  padding: 10px 14px;
+  flex: 1;
+}
+
+.pbta-track-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #C9813A;
+  min-width: 42px;
+}
+
+.pbta-track-pips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.pbta-pip {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #4a2c0a;
+  border-radius: 2px;
+  background: #120704;
+
+  &.filled.stress {
+    background: #6b1515;
+    border-color: #C9813A;
+  }
+
+  &.filled.xp {
+    background: #7a4a10;
+    border-color: #C9813A;
+  }
+}
+
+.pbta-track-count {
+  font-family: 'Lora', serif;
+  font-size: 0.8em;
+  color: #888780;
+  margin-left: 4px;
+}
+
+// ── Moves Section ────────────────────────────────────────────
+
+.pbta-moves-section {
+  background: #1a0a05;
+  border: 1px solid #4a2c0a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pbta-moves-header {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #C9813A;
+  padding: 10px 14px;
+  border-bottom: 1px solid #4a2c0a;
+  background: #120704;
+}
+
+.pbta-moves-list {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pbta-move-card {
+  padding: 10px 12px;
+  border-radius: 3px;
+  border-left: 3px solid #4a2c0a;
+  background: #120704;
+  transition: border-left-color 0.2s;
+
+  &:hover {
+    border-left-color: #C9813A;
+  }
+}
+
+.pbta-move-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85em;
+  color: #F5D7A0;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.pbta-move-stat {
+  font-family: 'Lora', serif;
+  font-size: 0.75em;
+  color: #C9813A;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.pbta-move-desc {
+  font-family: 'Lora', serif;
+  font-size: 0.82em;
+  color: #888780;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+// ── Unset State ──────────────────────────────────────────────
+
+.pbta-unset {
+  padding: 20px;
+  text-align: center;
+  color: #888780;
+  font-style: italic;
+}

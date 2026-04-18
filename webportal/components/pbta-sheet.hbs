@@ -1,46 +1,73 @@
 {{#if this.char.custom.pbta.role}}
-  <div class="hg-header">
-    <span class="hg-role">{{this.char.custom.pbta.role}}</span>
-    <span class="hg-gimmick">{{this.char.custom.pbta.gimmick}}</span>
+
+  {{! ── Header ── }}
+  <div class="pbta-sheet-header">
+    <div class="pbta-role-block">
+      <div class="pbta-role-label">Playbook</div>
+      <div class="pbta-role-name">{{this.char.custom.pbta.role}}</div>
+    </div>
+    <div class="pbta-gimmick-block">
+      <div class="pbta-gimmick-label">Gimmick</div>
+      <div class="pbta-gimmick-name">{{this.char.custom.pbta.gimmick}}</div>
+    </div>
   </div>
 
-  <div class="hg-stats">
+  {{! ── Stats ── }}
+  <div class="pbta-stats-row">
     {{#each this.char.custom.pbta.stats as |stat|}}
-      <div class="hg-stat">
-        <div class="hg-stat-name">{{stat.name}}</div>
-        <div class="hg-stat-value">{{stat.value}}</div>
+      <div class="pbta-stat-box">
+        <div class="pbta-stat-value {{if stat.positive 'positive'}} {{if stat.negative 'negative'}}">
+          {{stat.display}}
+        </div>
+        <div class="pbta-stat-name">{{stat.name}}</div>
       </div>
     {{/each}}
   </div>
 
-  <div class="hg-tracks">
-    <div class="hg-track">
-      <span class="label">Stress</span>
-      <div class="track-bar">
+  {{! ── Tracks ── }}
+  <div class="pbta-tracks-row">
+    <div class="pbta-track-block">
+      <div class="pbta-track-label">Stress</div>
+      <div class="pbta-track-pips">
         {{#each this.char.custom.pbta.stress_pips as |pip|}}
-          <div class="pip {{if pip.filled 'filled'}}"></div>
+          <div class="pbta-pip {{if pip.filled 'filled stress'}}"></div>
         {{/each}}
       </div>
+      <div class="pbta-track-count">
+        {{this.char.custom.pbta.stress}}/{{this.char.custom.pbta.stress_max}}
+      </div>
     </div>
-    <div class="hg-track">
-      <span class="label">XP</span>
-      <div class="track-bar">
+    <div class="pbta-track-block">
+      <div class="pbta-track-label">XP</div>
+      <div class="pbta-track-pips">
         {{#each this.char.custom.pbta.xp_pips as |pip|}}
-          <div class="pip {{if pip.filled 'filled'}}"></div>
+          <div class="pbta-pip {{if pip.filled 'filled xp'}}"></div>
         {{/each}}
+      </div>
+      <div class="pbta-track-count">
+        {{this.char.custom.pbta.xp}}/{{this.char.custom.pbta.xp_max}}
       </div>
     </div>
   </div>
 
-  <div class="hg-moves">
-    <h4>Moves</h4>
-    {{#each this.char.custom.pbta.all_moves as |move|}}
-      <div class="hg-move">
-        <strong>{{move.name}}</strong>
-        <p>{{move.desc}}</p>
-      </div>
-    {{/each}}
+  {{! ── Moves ── }}
+  <div class="pbta-moves-section">
+    <div class="pbta-moves-header">Moves</div>
+    <div class="pbta-moves-list">
+      {{#each this.char.custom.pbta.all_moves as |move|}}
+        <div class="pbta-move-card">
+          <div class="pbta-move-name">
+            {{move.name}}
+            <span class="pbta-move-stat">+{{move.stat}}</span>
+          </div>
+          <div class="pbta-move-desc">{{move.desc}}</div>
+        </div>
+      {{/each}}
+    </div>
   </div>
+
 {{else}}
-  <p>Playbook not yet initialized.</p>
+  <div class="pbta-unset">
+    <p>Playbook not yet initialized. Visit chargen to select your playbook.</p>
+  </div>
 {{/if}}
