@@ -1,0 +1,11 @@
+%lh
+%xh<%= char.name %>%xn - <%= role %> / <%= gimmick %>
+%r<%= section_line 'Stats' %>
+<%= stat_line %>
+%r<%= section_line 'Condition' %>
+Stress: [<%= stress_bar %>] <%= stress %>/<%= stress_max %>   XP: <%= xp %>/<%= xp_max %>
+%r<%= section_line 'Moves' %>
+<% moves.each do |m| -%>
+  <%= m %>
+<% end -%>
+%lf

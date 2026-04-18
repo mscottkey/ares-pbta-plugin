@@ -1,4 +1,5 @@
 require_relative 'helpers'
+require_relative 'templates/sheet_template'
 require_relative 'models/pbta_char_model'
 require_relative 'engine'
 require_relative 'commands/roll_cmd'
