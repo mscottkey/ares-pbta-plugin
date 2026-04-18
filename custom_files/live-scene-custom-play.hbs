@@ -1,0 +1,27 @@
+{{#if this.custom.pbta.role}}
+  <li><a href="#" {{action (mut this.selectPbtaRoll) true}} class="dropdown-item">PbtA Roll</a></li>
+{{/if}}
+
+{{#if this.selectPbtaRoll}}
+  <div class="hg-scene-roll-panel">
+    <div class="hg-scene-section-label">Stats</div>
+    <div class="hg-scene-stat-row">
+      {{#each this.custom.pbta.stats as |stat|}}
+        <button class="btn btn-sm hg-scene-stat-btn" {{action "hgRollStat" stat.key}}>
+          <span class="hg-scene-stat-name">{{stat.name}}</span>
+          <span class="hg-scene-stat-val">{{stat.display}}</span>
+        </button>
+      {{/each}}
+    </div>
+    {{#if this.custom.pbta.all_moves.length}}
+      <div class="hg-scene-section-label">Moves</div>
+      <div class="hg-scene-move-row">
+        {{#each this.custom.pbta.all_moves as |move|}}
+          <button class="btn btn-sm hg-scene-move-btn" {{action "hgRollMove" move.name}}>
+            {{move.name}}
+          </button>
+        {{/each}}
+      </div>
+    {{/if}}
+  </div>
+{{/if}}

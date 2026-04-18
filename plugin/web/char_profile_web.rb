@@ -14,6 +14,7 @@ module AresMUSH
         stats = %w[brawn cunning flow heart luck].map do |key|
           val = (raw_stats[key] || 0).to_i
           {
+            key: key,
             name: key.capitalize,
             value: val,
             display: val >= 0 ? "+#{val}" : val.to_s,

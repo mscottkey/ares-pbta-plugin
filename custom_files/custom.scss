@@ -514,3 +514,83 @@
   color: #888780;
   font-style: italic;
 }
+
+// ═══════════════════════════════════════════════════════════
+// PbtA Scene Play Roll Panel
+// ═══════════════════════════════════════════════════════════
+
+.hg-scene-roll-panel {
+  padding: 10px 0 6px;
+  border-top: 1px solid #4a2c0a;
+  margin-top: 6px;
+}
+
+.hg-scene-section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #C9813A;
+  margin-bottom: 6px;
+}
+
+.hg-scene-stat-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.hg-scene-stat-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #1a0a05;
+  border: 1px solid #4a2c0a;
+  color: #FDF6EC;
+  padding: 4px 10px;
+  border-radius: 3px;
+  min-width: 58px;
+
+  &:hover {
+    border-color: #C9813A;
+    background: #220e06;
+    color: #F5D7A0;
+  }
+}
+
+.hg-scene-stat-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #C9813A;
+}
+
+.hg-scene-stat-val {
+  font-family: 'Cinzel', serif;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.hg-scene-move-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.hg-scene-move-btn {
+  background: #1a0a05;
+  border: 1px solid #4a2c0a;
+  color: #FDF6EC;
+  font-family: 'Lora', serif;
+  font-size: 0.8em;
+  padding: 3px 10px;
+  border-radius: 3px;
+
+  &:hover {
+    border-color: #C9813A;
+    background: #220e06;
+    color: #F5D7A0;
+  }
+}
