@@ -1,27 +1,40 @@
-{{#if this.custom.pbta.role}}
-  <li><a href="#" {{action (mut this.selectPbtaRoll) true}} class="dropdown-item">PbtA Roll</a></li>
+{{#if this.custom.pbta}}
+  <li>
+    <a href="#" {{action (mut this.selectPbtaRoll) true}}
+       class="dropdown-item">PbtA Roll</a>
+  </li>
 {{/if}}
 
-{{#if this.selectPbtaRoll}}
-  <div class="hg-scene-roll-panel">
-    <div class="hg-scene-section-label">Stats</div>
-    <div class="hg-scene-stat-row">
-      {{#each this.custom.pbta.stats as |stat|}}
-        <button class="btn btn-sm hg-scene-stat-btn" {{action "hgRollStat" stat.key}}>
-          <span class="hg-scene-stat-name">{{stat.name}}</span>
-          <span class="hg-scene-stat-val">{{stat.display}}</span>
-        </button>
-      {{/each}}
-    </div>
-    {{#if this.custom.pbta.all_moves.length}}
-      <div class="hg-scene-section-label">Moves</div>
-      <div class="hg-scene-move-row">
-        {{#each this.custom.pbta.all_moves as |move|}}
-          <button class="btn btn-sm hg-scene-move-btn" {{action "hgRollMove" move.name}}>
-            {{move.name}}
-          </button>
-        {{/each}}
-      </div>
-    {{/if}}
-  </div>
+{{#if this.custom.heroesguild.dungeon_run_id}}
+  <li>
+    <a href="/heroesguild/dungeon/{{this.custom.heroesguild.dungeon_run_id}}"
+       target="_blank" class="dropdown-item">Dungeon HUD ↗</a>
+  </li>
+  <li>
+    <a href="#" {{action 'hgEndDungeonRun'}} class="dropdown-item">End Dungeon Run</a>
+  </li>
+{{else}}
+  <li>
+    <a href="#" {{action 'hgStartDungeonRun'}} class="dropdown-item">Start Dungeon Run</a>
+  </li>
 {{/if}}
+
+{{#if this.custom.heroesguild.tavern_night_id}}
+  <li>
+    <a href="/heroesguild/tavern/{{this.custom.heroesguild.tavern_night_id}}"
+       target="_blank" class="dropdown-item">Tavern HUD ↗</a>
+  </li>
+  <li>
+    <a href="#" {{action 'hgCloseTavernNight'}} class="dropdown-item">Close Tavern Night</a>
+  </li>
+{{else}}
+  <li>
+    <a href="#" {{action 'hgStartTavernNight'}} class="dropdown-item">Open Tavern Night</a>
+  </li>
+{{/if}}
+
+<PbtaRoll
+  @scene={{this.scene}}
+  @stats={{this.custom.pbta.stats}}
+  @moves={{this.custom.pbta.all_moves}}
+  @selectPbtaRoll={{this.selectPbtaRoll}} />

@@ -9,6 +9,7 @@ require_relative 'commands/advance_cmd'
 require_relative 'commands/chargen_cmd'
 require_relative 'web/char_profile_web'
 require_relative 'web/chargen_web'
+require_relative 'web/pbta_roll_web'
 
 module AresMUSH
   module PbtA
@@ -38,6 +39,8 @@ module AresMUSH
       when "setHeroesGuildRole"     then return SetRoleRequestHandler
       when "setHeroesGuildGimmick"  then return SetGimmickRequestHandler
       when "heroesguildChargenData" then return ChargenDataRequestHandler
+      when "pbta_roll_stat"         then return PbtaRollStatRequestHandler
+      when "pbta_roll_move"         then return PbtaRollMoveRequestHandler
       end
       nil
     end
