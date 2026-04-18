@@ -29,10 +29,16 @@ module AresMUSH
     # Returns roles and gimmicks list for the chargen UI (no login required - read-only).
     class ChargenDataRequestHandler
       def handle(request)
-        {
+        char = request.enactor
+        result = {
           roles: PbtA.playbook_list,
           gimmicks: PbtA.gimmick_list
         }
+        if char
+          result[:char_role] = char.pbta_role
+          result[:char_gimmick] = char.pbta_gimmick
+        end
+        result
       end
     end
   end

@@ -10,6 +10,10 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
+    this.loadChargenData();
+  },
+
+  loadChargenData() {
     this.gameApi.requestOne('heroesguildChargenData', {}, null)
       .then((data) => {
         this.set('chargenData', data);
@@ -24,6 +28,7 @@ export default Component.extend({
           this.flashMessages.danger(response.error);
         } else {
           this.flashMessages.success('Playbook stats initialized!');
+          this.loadChargenData();
           if (this.updated) { this.updated(); }
         }
       });
@@ -39,6 +44,7 @@ export default Component.extend({
           this.flashMessages.danger(response.error);
         } else {
           this.flashMessages.success('Gimmick selected!');
+          this.loadChargenData();
           if (this.updated) { this.updated(); }
         }
       });

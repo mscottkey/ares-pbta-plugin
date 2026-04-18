@@ -1,6 +1,6 @@
 {{#if this.chargenData}}
-  {{#if @char.role}}
-    <p><strong>Playbook:</strong> {{@char.role}} &mdash; stats initialized.</p>
+  {{#if this.chargenData.char_role}}
+    <p><strong>Playbook:</strong> {{this.chargenData.char_role}} &mdash; stats initialized.</p>
   {{else}}
     <p>Select your Playbook in the Groups tab first, then click below to initialize your stats.</p>
     <button class="btn btn-primary" {{on "click" this.initStats}}>Initialize Playbook Stats</button>
@@ -9,8 +9,8 @@
   <hr />
 
   <p><strong>Gimmick:</strong>
-    {{#if @char.gimmick}}
-      {{@char.gimmick}}
+    {{#if this.chargenData.char_gimmick}}
+      {{this.chargenData.char_gimmick}}
     {{else}}
       None selected.
     {{/if}}
@@ -19,7 +19,7 @@
   <select onchange={{this.selectGimmickFromEvent}}>
     <option value="">-- Pick a Gimmick --</option>
     {{#each this.chargenData.gimmicks as |gimmick|}}
-      <option value={{gimmick.name}} selected={{eq gimmick.name @char.gimmick}}>
+      <option value={{gimmick.name}} selected={{eq gimmick.name this.chargenData.char_gimmick}}>
         {{gimmick.name}} - {{gimmick.desc}}
       </option>
     {{/each}}
