@@ -5,6 +5,8 @@ en:
     weak_hit: "You did it, but it's going to hurt tomorrow. (7-9, choose a complication)"
     miss: "You tried your best, but the dungeon is smarter than you. %{xp_msg}"
     xp_gained: "Mark XP. (%{total} total)"
+    xp_accumulating: "XP accumulating... (%{remainder} toward next point)"
+    xp_rate_limited: "XP rate limit reached for this period. Miss noted."
     doom_increased: "The dungeon noticed. Doom advances to %{level}."
     doom_alert: "%{room} goes on ALERT. 7-9 results now deal Stress."
     doom_hostile: "%{room} turns HOSTILE. Environmental threats incoming."

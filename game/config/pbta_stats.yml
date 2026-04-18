@@ -48,7 +48,7 @@ pbta:
       core_moves:
         - Parley
         - Inspire
-        - Defy Danger
+        - Mend
     Wildcardigan:
       desc: "No plan. No fear. Impressive survival rate, somehow."
       stats:
@@ -185,3 +185,12 @@ pbta:
         on_strong: "You have it. Clean. They don't know it's gone yet."
         on_weak: "You get it, but choose one — they notice something's off (though not necessarily you), you had to leave something behind, or it's not quite what you thought it was."
         on_miss: "They catch you in the act. Mark XP."
+      Mend:
+        stat: heart
+        desc: >-
+          When you tend to a wounded ally with words, medicine, or magic,
+          roll +Heart.
+          On 10+: they clear 2 Stress immediately.
+          On 7-9: they clear 1 Stress, but you take 1 Stress from the effort.
+          On 6-: something complicates the recovery — your Stress increases
+          by 1 and theirs does not change. Mark XP.

@@ -7,6 +7,8 @@ pbta:
     advance: advance
     playbook: playbook
     gimmick: gimmick
+    heal: heal
+    stress: stress
   doom_thresholds:
     4:
       label: Alert
@@ -19,6 +21,40 @@ pbta:
       effect: "All characters must Defy Danger just to remain in the room."
   stress_max: 5
   xp_to_advance: 10
+
+  # Stress recovery (passive cron-based)
+  stress_recovery: true
+  stress_recovery_multiplier: 1
+  # Days to next recovery tick = current_stress * multiplier
+  # At multiplier 1: stress 5 fully clears in 15 days (5+4+3+2+1)
+  stress_recovery_cron:
+    hour:
+      - 3
+    minute:
+      - 0
+    day:
+
+  # Healing move config
+  heal_moves:
+    - Mend
+  heal_cooldown_hours: 24
+
+  # XP config
+  xp_per_miss: 1
+  # Supports decimals: 0.25, 0.5, 1, 2
+  # Fractional XP accumulates until it reaches a whole number
+
+  xp_rate_limit: 1
+  xp_rate_days: 1
+  # Maximum whole XP points a character can earn per xp_rate_days rolling window.
+  # Set xp_rate_limit to 0 to disable rate limiting entirely.
+  # Example: limit 1, days 1 = at most 1 XP per day regardless of how many misses.
+  # Example: limit 3, days 7 = at most 3 XP per week.
+  # Fractional accumulation is also paused while rate-limited, preventing
+  # banked remainders from dumping all at once when the window resets.
+
+  xp_require_container: false
+  # If true, XP from misses only fires inside an active DungeonRun or TavernNight.
   lead_player_cap: 1
   lead_global_cap: 10
   lead_inactive_days: 14

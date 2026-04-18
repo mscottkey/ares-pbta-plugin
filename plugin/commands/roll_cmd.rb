@@ -48,6 +48,11 @@ module AresMUSH
           xp_msg = t('pbta.xp_gained', total: data[:new_xp])
           enactor.room.emit t('pbta.miss', xp_msg: xp_msg)
           client.emit t('pbta.advance_ready', name: enactor.name) if data[:advance_ready]
+        elsif data[:xp_accumulating]
+          xp_msg = t('pbta.xp_accumulating', remainder: data[:xp_remainder].round(2))
+          enactor.room.emit t('pbta.miss', xp_msg: xp_msg)
+        elsif data[:xp_rate_limited]
+          enactor.room.emit t('pbta.miss', xp_msg: t('pbta.xp_rate_limited'))
         end
         if data[:stress_bump]
           enactor.room.emit t('pbta.stress_taken',
