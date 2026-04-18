@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
@@ -8,14 +8,7 @@ export default Component.extend({
   flashMessages: service(),
   chargenData: null,
   previewedGimmick: null,
-
-  statList: computed('chargenData.char_stats', function() {
-    const stats = this.get('chargenData.char_stats') || {};
-    return ['brawn', 'cunning', 'flow', 'heart', 'luck'].map(key => {
-      const val = stats[key] || 0;
-      return { label: key.slice(0, 3).toUpperCase(), value: val >= 0 ? `+${val}` : `${val}` };
-    });
-  }),
+  statList: null,
 
   init() {
     this._super(...arguments);
@@ -26,6 +19,11 @@ export default Component.extend({
     this.gameApi.requestOne('heroesguildChargenData', {}, null)
       .then((data) => {
         this.set('chargenData', data);
+        const stats = data.char_stats || {};
+        this.set('statList', ['brawn', 'cunning', 'flow', 'heart', 'luck'].map(key => {
+          const val = stats[key] || 0;
+          return { label: key.charAt(0).toUpperCase() + key.slice(1), value: val >= 0 ? `+${val}` : `${val}` };
+        }));
         if (data.char_gimmick) {
           const current = data.gimmicks.find(g => g.name === data.char_gimmick);
           if (current) { this.set('previewedGimmick', current); }
