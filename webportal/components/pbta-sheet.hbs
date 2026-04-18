@@ -5,12 +5,12 @@
   </div>
 
   <div class="hg-stats">
-    {{#each-in @char.custom.pbta.stats as |stat value|}}
+    {{#each @char.custom.pbta.stats as |stat|}}
       <div class="hg-stat">
-        <div class="hg-stat-name">{{stat}}</div>
-        <div class="hg-stat-value">{{value}}</div>
+        <div class="hg-stat-name">{{stat.name}}</div>
+        <div class="hg-stat-value">{{stat.value}}</div>
       </div>
-    {{/each-in}}
+    {{/each}}
   </div>
 
   <div class="hg-tracks">

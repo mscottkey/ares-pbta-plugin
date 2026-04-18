@@ -5,7 +5,11 @@ module AresMUSH
         role = char.pbta_role
         return {} if role.nil? || role.empty?
 
-        stats = char.pbta_stats || {}
+        raw_stats = char.pbta_stats || {}
+        stats = %w[brawn cunning flow heart luck].map do |key|
+          val = raw_stats[key].to_i
+          { name: key.capitalize, value: val >= 0 ? "+#{val}" : val.to_s }
+        end
         gimmick = char.pbta_gimmick
         xp = char.pbta_xp.to_i
         stress = char.pbta_stress.to_i
