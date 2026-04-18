@@ -43,11 +43,15 @@ module AresMUSH
 
         result = Engine.roll(stat_val)
         output = Engine.format_roll(char.name, move_name, stat_name, result)
-        move_output = "%xc#{move_config['desc']}%xn"
+
+        tier_key = result[:tier].to_s
+        outcome = move_config["on_#{tier_key}"]
+        outcome_output = outcome ? "%xc#{outcome}%xn" : nil
 
         scene.room.emit(output) if scene.room
-        scene.room.emit(move_output) if scene.room
-        Scenes.add_to_scene(scene, "#{output}\n#{move_output}", char, false, false)
+        scene.room.emit(outcome_output) if outcome_output && scene.room
+        log_output = outcome_output ? "#{output}\n#{outcome_output}" : output
+        Scenes.add_to_scene(scene, log_output, char, false, false)
 
         doom_level = 0
         data = Engine.consequence_data(char, result, doom_level)

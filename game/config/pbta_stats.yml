@@ -10,9 +10,9 @@ pbta:
         cunning: -1
         luck: 0
       core_moves:
-      - Hack and Slash
-      - Defy Danger
-      - Stand Firm
+        - Hack and Slash
+        - Defy Danger
+        - Stand Firm
     Shadowfoot:
       desc: "Sneak, steal, survive."
       stats:
@@ -22,9 +22,9 @@ pbta:
         cunning: 2
         luck: 0
       core_moves:
-      - Pick Pockets
-      - Vanish
-      - Defy Danger
+        - Pick Pockets
+        - Vanish
+        - Defy Danger
     Arcanist:
       desc: "Magic is just physics you haven't broken yet."
       stats:
@@ -34,9 +34,9 @@ pbta:
         cunning: 1
         luck: 0
       core_moves:
-      - Unleash
-      - Attune
-      - Defy Danger
+        - Unleash
+        - Attune
+        - Defy Danger
     Heartspeaker:
       desc: "Words are weapons. Relationships are armor."
       stats:
@@ -46,9 +46,9 @@ pbta:
         cunning: 1
         luck: 0
       core_moves:
-      - Parley
-      - Inspire
-      - Defy Danger
+        - Parley
+        - Inspire
+        - Defy Danger
     Wildcardigan:
       desc: "No plan. No fear. Impressive survival rate, somehow."
       stats:
@@ -58,60 +58,130 @@ pbta:
         cunning: 0
         luck: 3
       core_moves:
-      - Hail Mary
-      - Lucky Break
-      - Defy Danger
-  gimmick_explainer: "A Gimmick is a passive ability that gives your character a situational edge. Unlike stats or moves, you don't roll for it - it just applies automatically when the conditions are right. Pick the one that fits how you want to play."
+        - Hail Mary
+        - Lucky Break
+        - Defy Danger
+
+  gimmick_explainer: >-
+    A Gimmick is a passive ability that gives your character a situational
+    edge. Unlike stats or moves, you don't roll for it — it applies
+    automatically when the conditions are right. Pick the one that fits
+    how you want to play.
+
   gimmicks:
     The Drunk:
       desc: "+1 Luck when in the Tavern."
-      lore: "Luck powers your Hail Mary move - the desperate, last-resort roll you make when everything else has gone wrong. A night of drinking at the Tavern before a delve gives you that reckless edge. This bonus only applies while you're actually in the Tavern room, so use it before you head into the dungeon."
+      lore: >-
+        Luck powers your Hail Mary move — the desperate, last-resort roll
+        you make when everything else has gone wrong. A night of drinking
+        at the Tavern before a delve gives you that reckless edge. This
+        bonus only applies while you're actually in the Tavern room, so
+        use it before you head into the dungeon.
       bonus_stat: luck
       bonus_value: 1
       location_required: Tavern
     Dungeon Veteran:
       desc: "+1 to Defy Danger when Doom >= 7."
-      lore: "Defy Danger is the move you roll when something bad is about to happen and you act to avoid it - dodging a trap, outrunning a collapse, resisting a spell. Doom is a counter that tracks how dire the dungeon situation has become. At 7+, you're in the Hostile zone: things are going very wrong. Veterans have seen it all before and keep their cool precisely when amateurs panic."
+      lore: >-
+        Defy Danger is the move you roll when something bad is about to
+        happen and you act to avoid it — dodging a trap, outrunning a
+        collapse, resisting a spell. Doom tracks how dire the dungeon
+        situation has become. At 7+, you're in the Hostile zone: things
+        are going very wrong. Veterans have seen it all before and keep
+        their cool precisely when amateurs panic.
       move_bonus: "Defy Danger"
       doom_threshold: 7
     Guild Rat:
       desc: "+1 Heart for Investigate moves."
-      lore: "Investigate is how you dig for information and uncover leads - talking to locals, reading the room, following a trail. Heart represents your social savvy and personal connections. Guild Rats have been around long enough to know everybody, and everybody owes them a favor. That network makes you a better investigator than your cunning alone would suggest."
+      lore: >-
+        Investigate is how you dig for information and uncover leads —
+        talking to locals, reading the room, following a trail. Heart
+        represents your social savvy and personal connections. Guild Rats
+        have been around long enough to know everybody, and everybody owes
+        them a favor. That network makes you a better investigator than
+        your cunning alone would suggest.
       move_bonus: Investigate
       stat_override: heart
+
   moves:
     universal:
       Defy Danger:
         stat: flow
-        desc: "When you act despite imminent threat, roll +Flow. On 10+, you do it. On 7-9, you do it but the GM picks a cost."
+        desc: "Act despite imminent threat or peril."
+        on_strong: "You do it, clean."
+        on_weak: "You do it, but choose one — you hesitate and lose ground, you attract unwanted attention, or you take 1 Stress."
+        on_miss: "You fail and the danger lands hard. Mark XP."
       Hack and Slash:
         stat: brawn
-        desc: "When you engage an enemy in melee, roll +Brawn."
+        desc: "Engage an enemy in direct melee combat."
+        on_strong: "You deal your damage and avoid their attack."
+        on_weak: "You deal your damage but take their hit too — choose one: take 1 Stress, lose your footing, or drop something important."
+        on_miss: "You're in a bad spot. The GM makes a move. Mark XP."
       Parley:
         stat: heart
-        desc: "When you use leverage to bend someone to your will, roll +Heart."
+        desc: "Use leverage or persuasion to get what you want from someone."
+        on_strong: "They do what you want, now or soon."
+        on_weak: "They'll do it, but they want something first — the GM names the price."
+        on_miss: "They refuse or things get complicated. Mark XP."
       Investigate:
         stat: cunning
-        desc: "When you dig for information, roll +Cunning. Generates a Lead on 7+."
+        desc: "Dig for information, follow a lead, or read a situation."
+        on_strong: "You uncover a solid lead. Generate a Lead with 2 clues needed."
+        on_weak: "You find something, but you drew attention. Generate a Lead with 4 clues needed. The GM introduces a complication."
+        on_miss: "You find nothing useful and someone noticed you asking. Mark XP."
       Hail Mary:
         stat: luck
-        desc: "When all else fails, roll +Luck. On 10+, something improbable saves you."
+        desc: "Throw caution aside and hope the universe is on your side."
+        on_strong: "Something improbable saves you — you get exactly what you need."
+        on_weak: "You get out of it, but the GM decides what it costs you."
+        on_miss: "Luck has run dry. Things get worse. Mark XP."
       Carouse:
         stat: heart
-        desc: "When you drink and revel in the Tavern, roll +Heart."
+        desc: "Drink, revel, and let loose in the Tavern."
+        on_strong: "Clear 2 Stress and gain 2 Vibe."
+        on_weak: "Clear 1 Stress and gain 1 Vibe, but choose one — you said something you shouldn't have, you owe someone a favor, or you wake up somewhere unexpected."
+        on_miss: "Tavern Fallout. The night did not go as planned. Mark XP."
+
     role_specific:
       Stand Firm:
         stat: brawn
-        desc: "When you hold your ground against overwhelming force, roll +Brawn. On 10+, clear 1 Stress."
+        desc: "Hold your ground against overwhelming force."
+        on_strong: "You hold. Clear 1 Stress and your allies get +1 forward on their next move while you're standing."
+        on_weak: "You hold, but choose one — take 1 Stress, give ground (you move but the others don't have to), or something gets broken or lost."
+        on_miss: "You're overwhelmed. The GM makes a move. Mark XP."
       Vanish:
         stat: flow
-        desc: "When you need to disappear, roll +Flow."
+        desc: "Disappear from a dangerous or unwanted situation."
+        on_strong: "You're gone. No one saw where you went."
+        on_weak: "You get clear, but choose one — you had to leave something behind, you can't go back that way, or someone caught a glimpse."
+        on_miss: "You're still very much present and now they're looking for you. Mark XP."
       Unleash:
         stat: flow
-        desc: "When you channel raw magic, roll +Flow. Name your effect; GM names a cost on 7-9."
+        desc: "Channel raw magic and name your effect."
+        on_strong: "It works, cleanly, as described."
+        on_weak: "It works, but the GM picks one — the effect is weakened or temporary, you take 1 Stress from the strain, or there's an unintended side effect."
+        on_miss: "The magic goes wrong in a way the GM decides. Mark XP."
+      Attune:
+        stat: flow
+        desc: "Sense the magical nature of a place or object."
+        on_strong: "The GM tells you something true and useful — what it does, what it wants, what it fears."
+        on_weak: "You get a sense of it, but the GM also tells you something unsettling or the attunement draws notice."
+        on_miss: "You open yourself up to something you weren't ready for. Mark XP."
       Inspire:
         stat: heart
-        desc: "When you rally your allies, roll +Heart. On 10+, give the party +1 forward."
+        desc: "Rally your allies with words or deeds."
+        on_strong: "Each ally who can hear you gets +1 forward on their next move."
+        on_weak: "Choose one ally — they get +1 forward, but you take 1 Stress from the effort."
+        on_miss: "Your words fall flat or land wrong. Mark XP."
       Lucky Break:
         stat: luck
-        desc: "Once per scene, roll +Luck to retroactively make something convenient be true."
+        desc: "Once per dungeon run, declare something convenient to be true."
+        on_strong: "It's true. Establish one fact about the current situation that helps you — a door that happens to be unlocked, a guard who stepped away, a rope that's just long enough."
+        on_weak: "It's true, but the GM adds a wrinkle."
+        on_miss: "It's definitely not true, and things are worse than you thought. Mark XP."
+      Pick Pockets:
+        stat: cunning
+        desc: "Lift something from someone without them noticing."
+        on_strong: "You have it. Clean. They don't know it's gone yet."
+        on_weak: "You get it, but choose one — they notice something's off (though not necessarily you), you had to leave something behind, or it's not quite what you thought it was."
+        on_miss: "They catch you in the act. Mark XP."
