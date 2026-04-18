@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { action } from '@ember/object';
+import { action, computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
@@ -8,6 +8,14 @@ export default Component.extend({
   flashMessages: service(),
   chargenData: null,
   previewedGimmick: null,
+
+  statList: computed('chargenData.char_stats', function() {
+    const stats = this.get('chargenData.char_stats') || {};
+    return ['brawn', 'cunning', 'flow', 'heart', 'luck'].map(key => {
+      const val = stats[key] || 0;
+      return { label: key.slice(0, 3).toUpperCase(), value: val >= 0 ? `+${val}` : `${val}` };
+    });
+  }),
 
   init() {
     this._super(...arguments);

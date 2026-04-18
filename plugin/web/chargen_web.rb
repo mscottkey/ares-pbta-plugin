@@ -38,6 +38,7 @@ module AresMUSH
         if char
           result[:char_role] = char.pbta_role
           result[:char_gimmick] = char.pbta_gimmick
+          result[:char_stats] = char.pbta_stats || {}
         end
         result
       end

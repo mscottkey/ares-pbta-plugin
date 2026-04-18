@@ -23,7 +23,7 @@ module AresMUSH
         %w[brawn cunning flow heart luck].map do |s|
           val = stats[s].to_i
           sign = val >= 0 ? "+" : ""
-          "%xh#{s[0..2].upcase}%xn #{sign}#{val}"
+          "%xh#{s.upcase}%xn #{sign}#{val}"
         end.join("  ")
       end
 

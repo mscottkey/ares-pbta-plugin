@@ -1,6 +1,18 @@
 {{#if this.chargenData}}
   {{#if this.chargenData.char_role}}
-    <p><strong>Playbook:</strong> {{this.chargenData.char_role}} &mdash; stats initialized.</p>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{this.chargenData.char_role}}</h5>
+        <div class="d-flex gap-3">
+          {{#each this.statList as |stat|}}
+            <div class="text-center">
+              <div><strong>{{stat.label}}</strong></div>
+              <div>{{stat.value}}</div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
   {{else}}
     <p>Select your Playbook in the Groups tab first, then click below to initialize your stats.</p>
     <button class="btn btn-primary" {{on "click" this.initStats}}>Initialize Playbook Stats</button>
