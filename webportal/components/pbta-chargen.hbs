@@ -11,26 +11,29 @@
   <h4>Choose Your Gimmick</h4>
   <p>{{this.chargenData.gimmick_explainer}}</p>
 
-  {{#each this.chargenData.gimmicks as |gimmick|}}
-    <div class="card mb-3 {{if (eq gimmick.name this.chargenData.char_gimmick) "border-primary"}}">
+  <select onchange={{this.previewGimmick}}>
+    <option value="">-- Browse Gimmicks --</option>
+    {{#each this.chargenData.gimmicks as |gimmick|}}
+      <option value={{gimmick.name}} selected={{eq gimmick.name this.previewedGimmick.name}}>
+        {{gimmick.name}}
+      </option>
+    {{/each}}
+  </select>
+
+  {{#if this.previewedGimmick}}
+    <div class="card mt-3">
       <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <h5 class="card-title mb-1">{{gimmick.name}}</h5>
-            <p class="card-text mb-1"><strong>{{gimmick.desc}}</strong></p>
-            <p class="card-text text-muted">{{gimmick.lore}}</p>
-          </div>
-          <div class="ms-3">
-            {{#if (eq gimmick.name this.chargenData.char_gimmick)}}
-              <span class="badge bg-primary">Selected</span>
-            {{else}}
-              <button class="btn btn-outline-primary btn-sm" {{on "click" (fn this.selectGimmick gimmick.name)}}>
-                Select
-              </button>
-            {{/if}}
-          </div>
-        </div>
+        <h5 class="card-title">{{this.previewedGimmick.name}}</h5>
+        <p class="card-text"><strong>{{this.previewedGimmick.desc}}</strong></p>
+        <p class="card-text">{{this.previewedGimmick.lore}}</p>
+        {{#if (eq this.previewedGimmick.name this.chargenData.char_gimmick)}}
+          <span class="badge bg-primary">Currently Selected</span>
+        {{else}}
+          <button class="btn btn-primary btn-sm" {{on "click" (fn this.selectGimmick this.previewedGimmick.name)}}>
+            Select {{this.previewedGimmick.name}}
+          </button>
+        {{/if}}
       </div>
     </div>
-  {{/each}}
+  {{/if}}
 {{/if}}

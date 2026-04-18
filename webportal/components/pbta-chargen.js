@@ -7,6 +7,7 @@ export default Component.extend({
   gameApi: service(),
   flashMessages: service(),
   chargenData: null,
+  previewedGimmick: null,
 
   init() {
     this._super(...arguments);
@@ -17,6 +18,10 @@ export default Component.extend({
     this.gameApi.requestOne('heroesguildChargenData', {}, null)
       .then((data) => {
         this.set('chargenData', data);
+        if (data.char_gimmick) {
+          const current = data.gimmicks.find(g => g.name === data.char_gimmick);
+          if (current) { this.set('previewedGimmick', current); }
+        }
       });
   },
 
@@ -32,6 +37,17 @@ export default Component.extend({
           if (this.updated) { this.updated(); }
         }
       });
+  },
+
+  @action
+  previewGimmick(event) {
+    const name = event.target.value;
+    if (!name) {
+      this.set('previewedGimmick', null);
+      return;
+    }
+    const gimmick = this.chargenData.gimmicks.find(g => g.name === name);
+    this.set('previewedGimmick', gimmick || null);
   },
 
   @action
