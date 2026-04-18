@@ -61,6 +61,7 @@ pbta:
       - Hail Mary
       - Lucky Break
       - Defy Danger
+  gimmick_explainer: "A Gimmick is a passive ability that gives your character a situational edge. Unlike stats or moves, you don't roll for it - it just applies automatically when the conditions are right. Pick the one that fits how you want to play."
   gimmicks:
     The Drunk:
       desc: "+1 Luck when in the Tavern."

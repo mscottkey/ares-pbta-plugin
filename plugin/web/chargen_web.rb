@@ -32,7 +32,8 @@ module AresMUSH
         char = request.enactor
         result = {
           roles: PbtA.playbook_list,
-          gimmicks: PbtA.gimmick_list
+          gimmicks: PbtA.gimmick_list,
+          gimmick_explainer: Global.read_config("pbta", "gimmick_explainer")
         }
         if char
           result[:char_role] = char.pbta_role
