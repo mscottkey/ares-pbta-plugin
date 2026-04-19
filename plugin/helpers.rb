@@ -47,6 +47,14 @@ module AresMUSH
       role_config ? role_config["stats"] : {}
     end
 
+    # Returns the list of stat names from config (e.g., ["brawn", "cunning", ...]).
+    def self.stat_names
+      roles = Global.read_config("pbta", "roles")
+      return [] unless roles && !roles.empty?
+      first_role_stats = roles.values.first["stats"]
+      first_role_stats ? first_role_stats.keys : []
+    end
+
     # - Chargen Actions ---------------------------
 
     # Sets the character's playbook and initializes stats from the role config.

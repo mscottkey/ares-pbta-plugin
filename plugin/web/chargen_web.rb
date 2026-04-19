@@ -33,6 +33,7 @@ module AresMUSH
         result = {
           roles: PbtA.playbook_list,
           gimmicks: PbtA.gimmick_list,
+          stat_names: PbtA.stat_names,
           gimmick_explainer: Global.read_config("pbta", "gimmick_explainer")
         }
         if char

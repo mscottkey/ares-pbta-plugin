@@ -20,7 +20,8 @@ export default Component.extend({
       .then((data) => {
         this.set('chargenData', data);
         const stats = data.char_stats || {};
-        this.set('statList', ['brawn', 'cunning', 'flow', 'heart', 'luck'].map(key => {
+        const statNames = data.stat_names || [];
+        this.set('statList', statNames.map(key => {
           const val = stats[key] || 0;
           return { label: key.charAt(0).toUpperCase() + key.slice(1), value: val >= 0 ? `+${val}` : `${val}` };
         }));

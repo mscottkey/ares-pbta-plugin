@@ -11,7 +11,7 @@ module AresMUSH
         stress_max = Global.read_config("pbta", "stress_max").to_i
         xp_max = Global.read_config("pbta", "xp_to_advance").to_i
 
-        stats = %w[brawn cunning flow heart luck].map do |key|
+        stats = PbtA.stat_names.map do |key|
           val = (raw_stats[key] || 0).to_i
           {
             key: key,

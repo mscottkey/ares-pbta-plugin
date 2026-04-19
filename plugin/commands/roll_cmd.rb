@@ -18,7 +18,7 @@ module AresMUSH
       end
 
       def handle
-        valid_stats = %w[brawn cunning flow heart luck]
+        valid_stats = PbtA.stat_names
         unless valid_stats.include?(stat_name)
           client.emit_failure "Unknown stat '#{stat_name}'. Valid stats: #{valid_stats.join(', ')}"
           return

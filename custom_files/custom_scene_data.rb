@@ -2,7 +2,7 @@ module AresMUSH
   module Scenes
     def self.custom_scene_data(viewer)
       stats = viewer.pbta_stats || {}
-      stat_list = %w[brawn cunning flow heart luck].map do |s|
+      stat_list = PbtA.stat_names.map do |s|
         val = (stats[s] || 0).to_i
         { key: s, name: s.capitalize,
           display: val >= 0 ? "+#{val}" : val.to_s }

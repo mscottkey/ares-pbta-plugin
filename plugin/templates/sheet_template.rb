@@ -20,7 +20,7 @@ module AresMUSH
 
       def stat_line
         stats = char.pbta_stats || {}
-        %w[brawn cunning flow heart luck].map do |s|
+        PbtA.stat_names.map do |s|
           val = stats[s].to_i
           sign = val >= 0 ? "+" : ""
           "%xh#{s.upcase}%xn #{sign}#{val}"

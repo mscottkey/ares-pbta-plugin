@@ -31,7 +31,7 @@ module AresMUSH
 
       def handle_stat_advance
         stat = advance_target&.downcase
-        valid_stats = %w[brawn cunning flow heart luck]
+        valid_stats = PbtA.stat_names
         unless valid_stats.include?(stat)
           client.emit_failure "Valid stats: #{valid_stats.join(', ')}"
           return

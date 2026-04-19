@@ -8,7 +8,7 @@ module AresMUSH
         stat = request.args[:stat] || request.args["stat"]
         scene = AresMUSH::Scene[request.args[:scene_id] || request.args["scene_id"]]
 
-        valid_stats = %w[brawn cunning flow heart luck]
+        valid_stats = PbtA.stat_names
         return { error: "Invalid stat." } unless valid_stats.include?(stat)
         return { error: "Scene not found." } unless scene
 
