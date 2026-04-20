@@ -25,7 +25,7 @@ module AresMUSH
           return
         end
 
-        stat_name = move_config["stat"]
+        stat_name = move_config["stat"] || move_config[:stat]
         room_name = enactor.room ? enactor.room.name : ""
         stat_val = PbtA.stat_value(enactor, stat_name,
                                    move_name: move_name,
@@ -33,7 +33,13 @@ module AresMUSH
 
         result = Engine.roll(stat_val)
         enactor.room.emit Engine.format_roll(enactor.name, move_name, stat_name, result)
-        enactor.room.emit "%xc#{move_config['desc']}%xn"
+
+        desc = move_config["desc"] || move_config[:desc]
+        tier_key = result[:tier].to_s
+        outcome = move_config["on_#{tier_key}"] || move_config["on_#{tier_key}".to_sym]
+
+        enactor.room.emit "%xc#{desc}%xn" if desc && !desc.empty?
+        enactor.room.emit "%xh%xyResult: %xn%xc#{outcome}%xn" if outcome && !outcome.empty?
 
         run = defined?(HeroesGuild) && HeroesGuild.respond_to?(:active_dungeon_run) ?
               HeroesGuild.active_dungeon_run(enactor.room) : nil

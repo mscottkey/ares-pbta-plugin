@@ -36,7 +36,7 @@ module AresMUSH
         return { error: "You don't have that move." } unless PbtA.char_has_move?(char, move_name)
         return { error: "Scene not found." } unless scene
 
-        stat_name = move_config["stat"]
+        stat_name = move_config["stat"] || move_config[:stat]
         stat_val = PbtA.stat_value(char, stat_name,
                                    move_name: move_name,
                                    room_name: scene.room&.name || "")
@@ -44,13 +44,19 @@ module AresMUSH
         result = Engine.roll(stat_val)
         output = Engine.format_roll(char.name, move_name, stat_name, result)
 
+        desc = move_config["desc"] || move_config[:desc]
         tier_key = result[:tier].to_s
-        outcome = move_config["on_#{tier_key}"]
-        outcome_output = outcome ? "%xc#{outcome}%xn" : nil
+        outcome = move_config["on_#{tier_key}"] || move_config["on_#{tier_key}".to_sym]
+
+        details = []
+        details << "%xc#{desc}%xn" if desc && !desc.empty?
+        details << "%xh%xyResult: %xn%xc#{outcome}%xn" if outcome && !outcome.empty?
+        
+        detail_output = details.join("\n")
 
         scene.room.emit(output) if scene.room
-        scene.room.emit(outcome_output) if outcome_output && scene.room
-        log_output = outcome_output ? "#{output}\n#{outcome_output}" : output
+        scene.room.emit(detail_output) if !detail_output.empty? && scene.room
+        log_output = !detail_output.empty? ? "#{output}\n#{detail_output}" : output
         Scenes.add_to_scene(scene, log_output, char, false, false)
 
         doom_level = 0
